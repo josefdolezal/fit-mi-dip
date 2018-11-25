@@ -1,0 +1,21 @@
+language: python
+dist: trusty
+before_install:
+- sudo apt-get -qq update
+- sudo apt-get install -y --no-install-recommends texlive-fonts-recommended texlive-latex-extra
+  texlive-fonts-extra dvipng texlive-latex-recommended texlive-lang-czechslovak texlive-generic-extra
+  lmodern latexmk latex-xcolor etoolbox
+install:
+- pip install pygments
+script:
+- latexmk -c
+- latexmk -pdf
+deploy:
+  provider: releases
+  api_key:
+    secure: j6yflaiDlp+DGwnNF8KLVYu09uSgrLtXcW43RfXeVO1moof20qsPFET37drfww5nrCWxt/ayYmDkMTcFXxQeHeUvNvdW2RR8UUcCuylAeCnjvgvJ/ggTLyVhKYWwiO8pWG9C4QWpN/TT/564BkfAElM8kpwsbuPQv9vgzk4Xc8M/vXuj7HK9Pw2TYkcTSY+8aCdmtAeWg330NBklNjE/pJceioKZhNyWBDG1pj2JpUVWdqmVtYNl0cE/28iY+7XSj2cubm/bN/V9K8ohgdLp2cdpu4yrWzc2RIMyb/HpdTR/qiVCtLlSUjCVxf2UPLorLqHfqAM6L3ftnFlF+udlX7LUTUAa+stZs3ZFry2+2YBanI5sFRnFP2ZrV9Nq9lDsjRF+pupHTI43tjZujVVnGBxvj/hS2E0jDSUx5s/QRBmRrkRyoN6oqJAQ37BbJA81qX+qw2RGVRwdz3eN/s6t7/pvz8LIgXw/JRNHtgrjknw8QrmgS1nUpHZnwXil4OlSMBMN7IUxtz3/w6vhGAAuTpxLOttdjncyMZ4wBB3qrNw1oUWWnFqw1r7oG5HyxD6Gxu8E88+BGQuasWAMJc0PKx6DB8En+aS6f6uydVMSW0lDlOu/vz1ctqUt6CAaIeaxTS8Gl7aKs/czOiz3BkqD3Qn4vmJ4IsVYBjWr5BmxcVE=
+  file: thesis.pdf
+  skip_cleanup: true
+  on:
+    repo: josefdolezal/fit-mi-dip
+    tags: true
