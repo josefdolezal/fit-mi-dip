@@ -1,0 +1,76 @@
+\documentclass[thesis=M,english]{FITthesis}[2018/03/12]
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage[chapter]{minted}
+\usepackage{dirtree}
+\usepackage[acronym]{glossaries}
+
+% Remove header from glossary list
+\renewcommand {\glossarysection}[2][] {}
+
+\makeglossaries
+\input{acronyms}
+
+\department{Department of Software Engineering}
+\title{Data Management Plans Migration for the DS Wizard Tool}
+\authorGN{Josef}
+\authorFN{Dolezal}
+\author{Josef Dolezal}
+\authorWithDegrees{Bc. Josef Dolezal}
+\supervisor{Ing. Robert Pergl, Ph.D.}
+\acknowledgements{\input{meta/acknowledgements}}
+\abstractEN{\input{meta/abstract-en}}
+\abstractCS{\input{meta/abstract-cs}}
+\placeForDeclarationOfAuthenticity{Prague}
+\keywordsCS{\input{meta/keywords-cs}}
+\keywordsEN{\input{meta/keywords-en}}
+\declarationOfAuthenticityOption{4}
+\website{https://github.com/josefdolezal/fit-mi-dip}
+
+
+\begin{document}
+
+\setsecnumdepth{part}
+\chapter{Introduction}
+
+\setsecnumdepth{all}
+\chapter{State-of-the-art}
+\cite{JJ92}
+
+\chapter{Analysis and design}
+
+\chapter{Realisation}
+
+\setsecnumdepth{part}
+\chapter{Conclusion}
+
+
+\bibliographystyle{iso690}
+\bibliography{bibliography}
+
+\setsecnumdepth{all}
+
+\appendix
+
+\chapter{Acronyms}
+\printglossary[type=acronym]
+
+\chapter{Contents of enclosed CD}
+
+\begin{figure}
+	\dirtree{%
+		.1 readme.txt\DTcomment{the file with CD contents description}.
+		.1 exe\DTcomment{the directory with executables}.
+		.1 src\DTcomment{the directory of source codes}.
+		.2 wbdcm\DTcomment{implementation sources}.
+		.2 thesis\DTcomment{the directory of \LaTeX{} source codes of the thesis}.
+		.1 text\DTcomment{the thesis text directory}.
+		.2 thesis.pdf\DTcomment{the thesis text in PDF format}.
+		.2 thesis.ps\DTcomment{the thesis text in PS format}.
+	}
+\end{figure}
+
+\end{document}
