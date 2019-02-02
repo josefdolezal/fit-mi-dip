@@ -1,71 +1,48 @@
 \chapter{Introduction}
 
 From the beginning of the ages, science has served to expand the collective consciousness of our society.
-It was, however, a privilege of experts in industry and their research results were not accessible the general public.
+It was, however, a privilege of experts in industry and their research results were not accessible to the general public.
 With the rise of technologies of the twenty-first century, science is undergoing significant changes.
 
 Science is no longer meant to serve a narrow group of scientists.
 Instead, we all use it in different forms in our daily lives.
-Today, strategic decisions in the commercial sector are almost exclusively based on data analysis.
+Today, strategic decisions in the commercial business are almost exclusively based on data analysis.
 Public participation in the processing of researched data is therefore almost unavoidable.
 
-Zpřístupnění vědy není ale důležité pouze pro laickou veřejnost, slouží i dalším výzkumníkům, kteří na výsledky exitujících experimentů chtějí navazovat.
-Problematikou přístupnosti a znovupoužitelnosti výzkumů se zabývá hnutí Open Science.
-
-Investice do vědy a výzkumu z peněz daňových poplatníků se jen v České Republice vyšplhají v roce 2019 na necelých 36 miliard korun\cite{rvvi-budget}.
-V Evropské unii se pak navíc v rámci projektu Horizon Europe bude v letech 2021 až 2027 do vědy investovat více než 2,5 bilionu korun\cite{euc-horizon-budget}.
-
-Je to právě odpovědnost k veřejným prostředkům, kvůli které by takto financovaný výzkum měl být přístupný (lidsky, ale i strojově), volně dostupný a na jeho výsledky by mělo být možné navázat.
-Formát publikací pomocí vědeckých článků, který fungoval po celé dvacáté století, už dnes není dostačující.
-Výsledky často nejsou zpracovatelné strojově nebo otevřeně (chráněné pomocí platebních bran), naměřená data nejsou srozumitelná (opět člověku nebo stroji) a závěry výzkumu nejsou reprodukovatelné.
-
-Hnutí Open Science si klade za cíl takový přístup k vědě změnit.
-Zastřešuje doporučení pro výzkumníky -- způsoby jakými sdílet data, spolupracovat, šířit své a využívat již existující výkumy a dělat je tak znovypoužitelnými.
-Základním požadavkem Open Science proto je, aby výzkumná data a všechny související nástroje splňovaly principy \glsentryshort{fair}.
-
-Tyto principy uvádějí, že výzkumná data by měla splňovat čtyři základní vlastnosti: \gls{fair}.
-Data by tedy měla být nalezitelná (pro člověka i stroj), přístupná (otevřeně, pomocí standardních protokolů), univerzálně zpracovatelná (se standardním názvoslovím, bez použití proprietárních formátů) a znovupoužitelná (strojově, s adekvátní licencí a dobře popsaná).
-
-Protože se jedná pouze o principy, jejich implementace není striktně daná.
-Jednou z možných implementací je \gls{dsw}.
-Jedná se o systém vyvíjený organizací ELIXIR\footnote{ELIXIR je nadnárodní organizace sdružující zdroje (databáze, softwarové nástroje, výukové materiály, \dots) v oblasti vědy napříč Evropou. Aktuálně čítá 23 buněk, které zastupují jednotlivé členské státy.} (konkrétně buňkami ELIXIR CZ a ELIXIR NL).
-
-\section*{Cíl práce}
-
-Tato práce navazuje na diplomovou práci Vojtěcha Knaisla, která se zabývala implementací migračního nástroje pro \gls{km} systému \gls{dsw}.
-
-Cílem je vytvořit migrační nástroj pro \gls{dmp} systému \gls{dsw}.
-Smyslem práce je umožnit výzkumníkům zmigrovat existující plány využívající straší verzi knowledge modelu (případně jeho lokalizaci) na novější verzi a reflektovat tak změny a nové informace.
-
-\medskip
-
-První kapitola shrnuje aktuální stav systém a zabývá se analýzou řešení.
-V rámci analýzy jsou rozebrány možné nástroje (programovací jazyky, frameworky, \dots) a možná řešení.
-
-Ve druhé kapitole, Návrh, se zabývám návrhem konkrétního řešení.
-Třetí kapitola, Implementace, popisuje implementaci popsaného řešení a jeho intergraci v rámci existujícího systému.
-Kapitola Testování, kterou je práce zakončena se obsahuje popis technik, které slouží k ověření funkčnosti řešení.
-
-From the beginning of the ages, science has served to expand the collective consciousness of our society.
-It was, however, a privilege of experts in industry and their research results were not accessible the general public.
-With the rise of technologies of the twenty-first century, science is undergoing significant changes.
-
-Science is no longer meant to serve a narrow group of scientists.
-Instead, we all use it in different forms in our daily lives.
-Today, strategic decisions in the commercial sector are almost exclusively based on data analysis.
-Public participation in the processing of researched data is therefore almost unavoidable.
-
-Making science accessible is however not only necessary for the general public.
-It also serves to the future researchers who would like to start their research on the results of existing.
+Making science accessible is however necessary not only for the general public.
+It also serves to the future researchers who would like to start their research on the existing data.
 The Open Science Movement is focusing on making science researches accessible and reproducible.
 
 In 2019, near to 1.4 billion euro will be funded into science and research from taxpayers' money in the Czech Republic itself\cite{rvvi-budget}.
 In addition to that, the European Union will invest more than 97 billion euro under the Horizon Europe project for research and innovation in the years 2021-2027\cite{euc-horizon-budget}.
 
-It is primarily the responsibility for the public funds, that should make researches funded in such manner accessible (by both humans and machines), available free of charge, reusable and reproducible.
-The format of publications using scientific articles, used during the whole twentieth, is therefore not sufficient anymore.
+It is primarily the responsibility for the public funds, that should make researches funded in such manner accessible (both by humans and machines), available free of charge, reusable and reproducible.
+The format of publications using scientific articles, used during the whole twentieth century, is therefore not sufficient anymore.
 Such format of results is often not machine-processable or open (charged using paywalls), data are not understandable, and research conclusions are not reproducible.
 
-The goal of the Open Science Movement is to change such approach to science.
-As Open Science we can understand an umbrella term for systematic change in how researchers work, collaborate, share ideas and makes their researches more accessible and reusable.
-The guiding principle for 
+The goal of the Open Science Movement is to change such an approach to science.
+As Open Science, we can understand an umbrella term for a systematic change in how researchers work, collaborate, share ideas and makes their researches more accessible and reusable.
+The guiding principle for Open Science, therefore, is making research data and its related tools fulfill the \glsentryshort{fair} principles.
+
+According to these principles, all research data should meet four basic requirements: \gls{fair}.
+Data should be findable for both humans and machines, accessible using open and universal protocols, interoperable with use of formal language and vocabulary, and reusable with clear and accessible license and with relevant attributes.
+
+As \gls{fair} only covers theoretical principles, there is no strict implementation.
+One of the existing implementations is \gls{dws}.
+This system is developed by ELIXIR\footnote{ELIXIR is multinational group of scientists associating scientific resources such as databases, software tools, and educational materials across Europe.} (specifically by ELIXIR CZ and EXILIR NL nodes).
+
+\section*{Goals of the thesis}
+
+This thesis extends the thesis of Ing. Vojtěch Knaisl which dealt with the topic of developing migration tool for \gls{km} in \gls{dsw} system.
+
+The main goal is to create migration tool for \gls{km} in \gls{dsw}.
+This tool will help researchers migrate existing plans based on older version of knowledge model (or its localization) to new version including new information and changes.
+
+\medskip
+
+The first chapter briefly sums up the current state of the system and deals with an analysis of the possible solution.
+The analysis describes possible tools (programming languages, frameworks, \dots) and solutions.
+
+In the following chapter, Design, I am describing the design of the proposed solution.
+Then, I describe the implementation part of the solution and its integration into the existing system, in chapter Solution.
+The last chapter, Testing, describes which techniques and tools I used to verify whether the tool is working correctly.
