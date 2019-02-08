@@ -15,27 +15,35 @@ Using standard terminology such application is reffered to as a frontend.
 
 \todo{Make sure the server part description and development state are both correct}
 
-\section{DSW-Server}
+\subsection{DSW-Server}
 
 The backend part of the application is written using Haskell programming language.
-The main goal of the portal is to create data management plans.
-Those are made using completed questionaries.
-Questionaries are made by data stewards on top of existing knowledge models.
+The main goal of this portal is to create data management plans. \reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
+To create a data plan, the system has to contain at least one knowledge model.
+At the time of writinng, \gls{dsw} is shiped with prebuild knowledge model called \textit{core}.
 
-\reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
+Knowledge models are represented using \gls{json} and stored in a file on server file system.
+Data stewards then use these models to create a questionaries.
+The role of researchers is to fill in the questionaries with meta informations about their research.
 
-Standard flow is then as follows:
+Filled-in questionaries are used by data stewards to create management plans.
+This flow basically covers system features.
 
-\begin{enumerate}
-    \item Data steward creates an questionnaire using knowledge model or its localization (so called \textit{package}),
-    \item researcher fills up the questionnaire,
-    \item portal generates the data management plan based on the completed questionnaire.
-\end{enumerate}
+We however have silent assumptions in the flow described above.
+The portal also have to support following features in addition to the mentioned business logic:
 
-This simple flow
+\begin{itemize}
+    \item User management (roles, authorization and authentication),
+    \item Package administration (cration, editing and versioning),
+    \item Data persistency (database connection, file system integration)
+    \item \glsentryshort{rest} \glsentryshort{api}.
+\end{itemize}
 
-\section{DSW-Client}
+All of the mentioned functions are split into independent Haskell modules.
+The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in haskell, inspired by Ruby's Sinatra. It is an lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
 
-\section{System architecture}
+\subsection{DSW-Client}
 
-\section{Knowledge model migrations}
+\subsection{System architecture}
+
+\subsection{Knowledge model migrations}
