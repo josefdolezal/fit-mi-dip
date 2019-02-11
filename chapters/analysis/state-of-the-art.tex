@@ -44,6 +44,33 @@ The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framewo
 
 \subsection{DSW-Client}
 
+DSW-Client is an frontend application written in Elm programming language\footnote{Elm is an type-safe programming language used for web applications frontend. The source code written in Elm is transpiled into JavaScript and interpreted using web browser. Elm website: https://elm-lang.org.}.
+It provides web-based user interface for the server application.
+
+The implementation was done by Ing. Jan Slifka as a part of his master's thesis in 2018.
+\todo{Validate the date of frontend application}
+
+The application is built using Elm Architecture.
+The logic of such appliaction is split into three separated parts:
+
+\begin{description}
+    \item[Model] -- represents applicaton state,
+    \item[Update] -- allows to update the state,
+    \item[View] -- interprets state using HTML.
+\end{description}
+
+This architecture has a similar approach to the state modification as popular state container called Redux.
+Redux is also used for frontend applications, most commonly with React view library.
+
+In opose to React and Redux, Elm language was build with architecutre pattern in mind from the beginning.
+According to the official website\cite{elm-speed}, Elm is up to two times faster than same application written in React.
+
+The application is completely rendered localy in user's web browser.
+That makes the server and client applications fully independet on each other.
+Development of both is therefore break up in to two separate repositories.
+
 \subsection{System architecture}
 
 \subsection{Knowledge model migrations}
+
+\subsection{Deployment}
