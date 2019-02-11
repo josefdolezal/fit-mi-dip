@@ -1,36 +1,36 @@
 \section{State-of-the-art}
 
-As has been already stated, the \gls{dsw} application is being developed in cooperation of ELIXIR CZ and ELIXIR NL research groups.
-It is currently split into multiple independent parts.
+As has been already stated, the DSW application is being developed in cooperation of ELIXIR CZ and ELIXIR NL research groups.
+The development is currently split into multiple independent parts.
 
 The whole system is available as an open-source\footnote{Application repositories are available at GitHub under the organization page at https://github.com/ds-wizard.}.
-That said, the source code, documentation and the development process are publicly accessible and open to contribution.
+That said, the source code, documentation, and the development process are publicly accessible and open to contribution.
 
 The most significant part of the project is the server application called DSW-Server (in \gls{dsw} terminology called \textit{portal}).
 This application implements all the functionality and business logic of the system.
-Using standard terminology we can reffer to it as a backend.
+Using standard terminology, we can refer to it as a backend.
 
 Since the portal application does not provide any \gls{ui} (it only exposes \glsentryshort{api} using \glsentryshort{rest} standard), there is an complementary web application called DSW-Client (or, in \gls{dsw} terminology, called just \textit{client} for short) which does just that.
-Using standard terminology such application is reffered to as a frontend.
+Using standard terminology, such application is refered to as a frontend.
 
 \todo{Make sure the server part description and development state are both correct}
 
 \subsection{DSW-Server}
 
-The backend part of the application is written using Haskell programming language.
-The main goal of this portal is to create data management plans. \reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
-To create a data plan, the system has to contain at least one knowledge model.
-At the time of writinng, \gls{dsw} is shiped with prebuild knowledge model called \textit{core}.
+The backend part of the application is written using the Haskell programming language.
+The primary goal of this portal is to create data management plans. \reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
+At least one knowledge model must be added to the system before data plans can be generated.
+At the time of writing, \gls{dsw} is shipped with a prebuild knowledge model called \textit{core}.
 
-Knowledge models are represented using \gls{json} and stored in a file on server file system.
-Data stewards then use these models to create a questionaries.
-The role of researchers is to fill in the questionaries with meta informations about their research.
+Knowledge models are represented using \gls{json} and stored in a file on the server file system.
+Data stewards then use these models to create questionaries.
+The role of researchers is to fill in the questionaries with meta information about their research.
 
 Filled-in questionaries are used by data stewards to create management plans.
-This flow basically covers system features.
+This flow mostly covers system features.
 
-We however have silent assumptions in the flow described above.
-The portal also have to support following features in addition to the mentioned business logic:
+We, however, have silent assumptions in the flow described above.
+The portal also has to support the following features in addition to the mentioned business logic:
 
 \begin{itemize}
     \item User management (roles, authorization and authentication),
@@ -40,18 +40,18 @@ The portal also have to support following features in addition to the mentioned 
 \end{itemize}
 
 All of the mentioned functions are split into independent Haskell modules.
-The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in haskell, inspired by Ruby's Sinatra. It is an lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
+The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in Haskell, inspired by Ruby's Sinatra. It is a lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
 
 \subsection{DSW-Client}
 
-DSW-Client is an frontend application written in Elm programming language\footnote{Elm is an type-safe programming language used for web applications frontend. The source code written in Elm is transpiled into JavaScript and interpreted using web browser. Elm website: https://elm-lang.org.}.
-It provides web-based user interface for the server application.
+DSW-Client is a frontend application written in Elm programming language\footnote{Elm is a type-safe programming language used for web applications frontend. The source code written in Elm is transpiled into JavaScript and interpreted using a web browser. Elm website: https://elm-lang.org.}.
+It provides a web-based user interface for the server application.
 
 The implementation was done by Ing. Jan Slifka as a part of his master's thesis in 2018.
 \todo{Validate the date of frontend application}
 
 The application is built using Elm Architecture.
-The logic of such appliaction is split into three separated parts:
+The logic of such application is split into three separated parts:
 
 \begin{description}
     \item[Model] -- represents applicaton state,
@@ -59,15 +59,15 @@ The logic of such appliaction is split into three separated parts:
     \item[View] -- interprets state using HTML.
 \end{description}
 
-This architecture has a similar approach to the state modification as popular state container called Redux.
+This architecture has a similar approach to state modification as a popular state container called Redux.
 Redux is also used for frontend applications, most commonly with React view library.
 
-In opose to React and Redux, Elm language was build with architecutre pattern in mind from the beginning.
+In oppose to React and Redux, Elm language was built with an architecture pattern in mind from the beginning.
 According to the official website\cite{elm-speed}, Elm is up to two times faster than same application written in React.
 
-The application is completely rendered localy in user's web browser.
-That makes the server and client applications fully independet on each other.
-Development of both is therefore break up in to two separate repositories.
+The application is fully rendered locally in the user's web browser.
+That makes the server and client applications fully independent of each other.
+Development of both parts is, therefore, break up into two separate repositories.
 
 \subsection{System architecture}
 
