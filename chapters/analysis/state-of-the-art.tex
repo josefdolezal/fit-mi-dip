@@ -173,6 +173,36 @@ These three parts are combined using period (.) character and returned as \textt
 
 \paragraph*{Authorization}
 
+In modern application, authenticating users is not enough.
+We might want a system to support to support wide range users hierarchy, capabilities and responsibilities.
+In \gls{dsw} this is solved using combinations of roles and permissions.
+
+Each user has one of the following roles:
+
+\begin{itemize}
+    \item Administrator,
+    \item Data Steward,
+    \item Researcher
+\end{itemize}
+
+Once user is created, he has assinged role and default set of permissions.
+Having two levels of authorization is an important system feature as user's account might gain or lose priviledges over its lifetime.
+
+Permissions are resource specific and for each resource we might distinguish between multiple permissions (for example read and write permissions).
+Default permissons are system-wide configurable using configuration file (which is loaded at startup time).
+
+In default environment, Administrator has all possible permissions including user, organization and content management.
+The role in heirarchy just under the Administrator -- Data Steward -- has similar permissions but is unable to manage organizations and other users.
+Research is able to see knowledge models and public questionnaires, but is able to only modify content he created.
+
+As mentioned earlier in section \ref{sec:handler}, permissions are checked in handler before any business logic happens.
+Each handler has defined which permission is required (for example \texttt{Read questionnaire}).
+Once the user makes request, handler checks authentication state and search user's permissions.
+If user has granted required permissions, request processing continues.
+Otherwise the request is aborted immediately.
+
+\todo{Add permissions checking code sample here}
+
 \paragraph*{\gls{dao}} is a way to access persisted data using simplified interface.
 In general, application data may be persisted in many ways.
 The most common approach to this is using database. \todo{Add cite here}
