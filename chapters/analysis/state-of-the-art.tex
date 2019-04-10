@@ -124,6 +124,23 @@ Services makes operations based on given input data (objects identifiers, \gls{d
 Operations itself then converts \gls{dto} objects into internal representation (persisted object) and do computations on it.
 As a result of computation, \gls{dto} object is returned from service.
 
+\paragraph*{\gls{dto}} While describing Service layer earlier in this chapter, there were multiple references to objects called \gls{dto}.
+These objects' goal is to create framework-independent interface between layers.
+\gls{dto} are plain objects\footnote{By plain objects we usually mean structures, which are not restrcited by any framework and are built only constructs available in language itself or by other plain objects. Same pattern is available in other languages. In Java programming language, same concept is refered to as \gls{pojo}\cite{wiki-pojo}.} representing standard model objects, usually in many ways.
+
+Model objects may be complex structures containing significant amount of data.
+Such complexity may or may not be appropriate for some service operations.
+
+While presenting list of data (populated by \gls{dto}) to the user, it is not necessary to fetch all nested objects recursively.
+Instead, simplified objects may be used and additional data may be requested on demand.
+On the other hand, when user want to see detail of some list item, \gls{dto} object should contain enough data to fulfill user's expectaion.
+For such usecase, there would be two different objects and service would choose the one which best fits user expectation.
+
+\todo{Add dto example}
+
+In \gls{dsw} this approach is used to display either list or detail of questionnaires, knowledge models or knowledge model customizations.
+Conversion between model and \gls{dto} objects are done using specific services.
+
 \paragraph*{\gls{dao}} is a way to access persisted data using simplified interface.
 In general, application data may be persisted in many ways.
 The most common approach to this is using database. \todo{Add cite here}
