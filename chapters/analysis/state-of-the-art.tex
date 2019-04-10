@@ -71,6 +71,85 @@ Development of both parts is, therefore, break up into two separate repositories
 
 \subsection{System architecture}
 
+In the first part of this section, I will describe the architecture of server-side of the project which is writtent in Haskell.
+The second part is dedicated to the front end application.
+
+\subsubsection*{Server-side application}
+
+As mentioned earlier the server part of the application is written using Haskell programming language, specifically using Scotty web framework.
+The application expose public \gls{rest} \glsentryshort{api} over \glsentryshort{http} protocol.
+
+To achieve modularity and loose coupling, the application is split into multiple modules.
+Those modules are grouped into logical partitions based on their purpose.
+The most significant parts are:
+
+\begin{itemize}
+    \item Handler layer,
+    \item Service \gls{dto} layers,
+    \item Model and \gls{dao} layers,
+\end{itemize}
+
+\paragraph*{Handler layer} is responsible for processing \gls{api} requests.
+It directly interacts with Scotty framework, transforms incomming data into strongly typed objects and orchestrates other layers to evaluate response.
+
+Handler groups together multiple endopoints.
+Those endpoints are uniquely registred to specific \gls{url} and \gls{http} method.
+In terms of server application, we refer to such pair as \textit{route}.
+
+\todo{Add example of how router registers handlers and HTTP request example.}
+
+Once the correct handler for requested route selected, it starts processing data from request.
+Such data might be \gls{url} (or query) parameters and request body.
+Those data are transformed into language primitives (such as \texttt{Int} or \texttt{String}) or complex objects called \gls{dto} (explained later).
+In case of invalid or malformed data, the request is aborted immediately with appropriate error information in response.
+
+In addition to that, some routes may also require special permissions in order to be executed.
+Those routes needs requests to be authenticated using \gls{jwt} technology and user tied with given token must be granted such permissions.
+
+If the request is validated successfully, required data are passed into service layer where the actual business logic happens.
+
+\paragraph*{Service layer} is responsible for application logic.
+This means, that its public interface is exposed to other layers using \gls{dto}.
+Private functions and internal dependencies (such as data persistence) are thus \textit{implementation detail} of the layer itself and does not affect its interface.
+
+In \gls{dsw}, service layer takes care of basic \gls{crud} operations over persisted entities.
+This includes basic objects, for example \texttt{User}, \texttt{KnowledgeModel} and \texttt{Questionnaire}.
+
+\todo{Should these entities be named in the same way they are in database?}
+
+In addition to data transformation, this layer also manages application configuration, knowledge model migrations, \gls{dto} mapping and maintains data consistency.
+To keep the public interface simple, services are usually composed using other services or \gls{dao}.
+
+Services makes operations based on given input data (objects identifiers, \gls{dto}, \dots).
+Operations itself then converts \gls{dto} objects into internal representation (persisted object) and do computations on it.
+As a result of computation, \gls{dto} object is returned from service.
+
+\paragraph*{\gls{dao}} is a way to access persisted data using simplified interface.
+In general, application data may be persisted in many ways.
+The most common approach to this is using database. \todo{Add cite here}
+But even database persitence may be implemented in different ways.
+
+On the marked, there are several options available.
+There are various kinds of databases: Graph databases, Relational databases, Document databases and many others.
+Moreover, all of those offered as free to use as well as business solutions.
+
+In \gls{dsw}, the Mongo DB was chosen as a dabatase for persisting data.
+Mongo DB is an NoSQL document databse (explained later), which allows to store data using nested structures.
+
+The goal of \gls{dao} is to encapsulate such technical detail from other application layers.
+The underlying database may change over time, but as long as data model stays the same, the only affected layer will be \gls{dao}.
+
+In Haskell, such layer is implemented using independent modules where each module manages one resource (Mongo DB collection).
+The module public interface is implemented using free functions.
+Those functions offer high level API such as \texttt{findAll}, \texttt{findById} and similar for all \gls{crud} operations.
+
+\todo{Add DAO code example here}
+
+
+\subsection{Frontend application}
+
+\image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
+
 \subsection{Knowledge model migrations}
 
 \subsection{Deployment}
