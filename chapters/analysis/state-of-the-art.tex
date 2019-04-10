@@ -89,7 +89,7 @@ The most significant parts are:
     \item Model and \gls{dao} layers,
 \end{itemize}
 
-\paragraph*{Handler layer} is responsible for processing \gls{api} requests.
+\paragraph*{Handler layer}\label{sec:handler} is responsible for processing \gls{api} requests.
 It directly interacts with Scotty framework, transforms incomming data into strongly typed objects and orchestrates other layers to evaluate response.
 
 Handler groups together multiple endopoints.
@@ -98,7 +98,7 @@ In terms of server application, we refer to such pair as \textit{route}.
 
 \todo{Add example of how router registers handlers and HTTP request example.}
 
-Once the correct handler for requested route selected, it starts processing data from request.
+Once the correct handler for requested route is selected, it starts processing data from request.
 Such data might be \gls{url} (or query) parameters and request body.
 Those data are transformed into language primitives (such as \texttt{Int} or \texttt{String}) or complex objects called \gls{dto} (explained later).
 In case of invalid or malformed data, the request is aborted immediately with appropriate error information in response.
@@ -140,6 +140,38 @@ For such usecase, there would be two different objects and service would choose 
 
 In \gls{dsw} this approach is used to display either list or detail of questionnaires, knowledge models or knowledge model customizations.
 Conversion between model and \gls{dto} objects are done using specific services.
+
+\paragraph*{Mongo DB}
+
+\paragraph*{Authentication} In section \ref{sec:handler} about \gls{http} requests handling, I briefly discussed endpoint authentication using \gls{jwt}.
+In this section the reader will be acquainted with how these tokens work.
+
+Even though some endpoints (such as login or registration) do not require user to be authenticated, vast majority of the application is based on managing private data.
+Therefore, the user needs to be authenticated using username and password before he or she can access these data.
+Similary to data persistence, also authentication may be done in many ways.
+There is basic authorization\footnote{Base64 is an HTTP authentication used to directly encode user's credentials into reuqest header. Such approach is considered as insecure as the credentials are easily captured by unauthorized person\cite{qnimate-base64}.}, API keys, \gls{jwt} and many more.
+
+The \gls{dsw} application uses \gls{jwt} tokens, which stands out by having ability to be verified for issuer authenticity.
+Thanks to this, the issuer (in this case server application) can embed custom payload into token and be sure those data will not be modified by unauthorized person.
+
+To become authorized, user first have to log in to application using username and password.
+If those credentials are correct, server will issue access token and send it back to the user.
+For all request requiring authorization, the user has to send issued token in request header.
+Server will read the payload, verify token integrity and check his permissions.
+If the token is valid, appropriate handler is called.
+
+All \gls{jwt} tokens have same structure.
+The token consists from three parts: \texttt{Header}, \texttt{Payload} and \texttt{Signature}.
+
+\todo{Put JWT illustration here}
+
+Header contains information about token type and hashing algorithm used to generate signature.
+Payload is arbitrary \gls{json} object containing publicly visible data (such as user identifier).
+Token signature is created by hashing header and payload (both encoded using Base64 algorithm\footnote{Base64 -- https://www.techopedia.com/definition/27209/base64}) by algorithm specified in header and also encoded using Base64.
+
+These three parts are combined using period (.) character and returned as \texttt{String}.
+
+\paragraph*{Authorization}
 
 \paragraph*{\gls{dao}} is a way to access persisted data using simplified interface.
 In general, application data may be persisted in many ways.
