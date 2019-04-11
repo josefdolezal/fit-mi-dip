@@ -141,8 +141,6 @@ For such usecase, there would be two different objects and service would choose 
 In \gls{dsw} this approach is used to display either list or detail of questionnaires, knowledge models or knowledge model customizations.
 Conversion between model and \gls{dto} objects are done using specific services.
 
-\paragraph*{Mongo DB}
-
 \paragraph*{Authentication} In section \ref{sec:handler} about \gls{http} requests handling, I briefly discussed endpoint authentication using \gls{jwt}.
 In this section the reader will be acquainted with how these tokens work.
 
@@ -203,7 +201,7 @@ Otherwise the request is aborted immediately.
 
 \todo{Add permissions checking code sample here}
 
-\paragraph*{\gls{dao}} is a way to access persisted data using simplified interface.
+\paragraph*{\gls{dao}}\label{sec:dao} is a way to access persisted data using simplified interface.
 In general, application data may be persisted in many ways.
 The most common approach to this is using database. \todo{Add cite here}
 But even database persitence may be implemented in different ways.
@@ -223,6 +221,37 @@ The module public interface is implemented using free functions.
 Those functions offer high level API such as \texttt{findAll}, \texttt{findById} and similar for all \gls{crud} operations.
 
 \todo{Add DAO code example here}
+
+\paragraph*{Mongo DB}\label{sec:mongo-db} was chosen as a persistent layer in early development of \gls{dsw}.
+As stated earlier in section \ref{sec:dao}, Mongo DB is an document database.
+
+By document document dabase, we understand system which is able to store hierarchical tree structures (so called \textit{docuemnts}) composed using scalars (\texttt{String}, \texttt{Integer}, \dots), hashable maps, arrays or nested documents.
+These documents are identified using internal unique identifiers and grouped into collections.
+
+On collections, we can run standard \gls{crud} queries to manipulate with stored data.
+Mongo DB provides \gls{api} for querying objects using notation based on \gls{json}.
+This notation allows to query on nested objects, aggregations, relations or regular expressions.
+Since \gls{json} notation may be unnecessarily verbose, documents are internaly stored in \gls{bson} representation.
+
+\todo{Add mongo db query example}
+
+In oppose to standard relational databases, collections and documents does not have an explicit schema.
+Therefore there might be stored almost any kind of data in collection at one time.
+
+Another notable difference is in data normalization.
+Standard databases (based on \gls{sql}) use data decompozition and normalization to achieve better performance and great organisation of tables and columns.
+In case of Mongo DB, related documents are usually tightly coupled together (using composition) and duplicated instead of relations using foreign keys.
+
+As mentioned before, the data are internally stored in binary format which is not directly usable in Haskell.
+Therefore the driver expose two special Typeclasses\footnote{More information about Haskell Typeclasses are available at https://www.haskell.org/tutorial/classes.html} for encoding and decoding binary formatted data.
+Such typeclasses must be implemented by all types which will be stored in database.
+
+\todo{Add mongo typeclass example}
+
+In addition to coding Typeclasses, the driver also expose type-safe interface to build \gls{crud} queries.
+These queries are created using simple \gls{dsl} as shown in example (??).
+
+\todo{Add mongo dsl example}
 
 
 \subsection{Frontend application}
