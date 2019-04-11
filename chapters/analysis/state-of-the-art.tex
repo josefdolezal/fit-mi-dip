@@ -96,7 +96,7 @@ Handler groups together multiple endopoints.
 Those endpoints are uniquely registred to specific \gls{url} and \gls{http} method.
 In terms of server application, we refer to such pair as \textit{route}.
 
-\todo{Add example of how router registers handlers and HTTP request example.}
+\hscode{code:router-handler}{Routes definition and route endpoint (simplified)}{router-handler.hs}
 
 Once the correct handler for requested route is selected, it starts processing data from request.
 Such data might be \gls{url} (or query) parameters and request body.
@@ -114,8 +114,6 @@ Private functions and internal dependencies (such as data persistence) are thus 
 
 In \gls{dsw}, service layer takes care of basic \gls{crud} operations over persisted entities.
 This includes basic objects, for example \texttt{User}, \texttt{KnowledgeModel} and \texttt{Questionnaire}.
-
-\todo{Should these entities be named in the same way they are in database?}
 
 In addition to data transformation, this layer also manages application configuration, knowledge model migrations, \gls{dto} mapping and maintains data consistency.
 To keep the public interface simple, services are usually composed using other services or \gls{dao}.
@@ -136,7 +134,7 @@ Instead, simplified objects may be used and additional data may be requested on 
 On the other hand, when user want to see detail of some list item, \gls{dto} object should contain enough data to fulfill user's expectaion.
 For such usecase, there would be two different objects and service would choose the one which best fits user expectation.
 
-\todo{Add dto example}
+\hscode{code:dto}{DTO definition and transformation from Model object}{dto.hs}
 
 In \gls{dsw} this approach is used to display either list or detail of questionnaires, knowledge models or knowledge model customizations.
 Conversion between model and \gls{dto} objects are done using specific services.
@@ -158,14 +156,14 @@ For all request requiring authorization, the user has to send issued token in re
 Server will read the payload, verify token integrity and check his permissions.
 If the token is valid, appropriate handler is called.
 
-All \gls{jwt} tokens have same structure.
+All \gls{jwt} tokens have same structure (pictured in figure \ref{fig:jwt-token}).
 The token consists from three parts: \texttt{Header}, \texttt{Payload} and \texttt{Signature}.
 
-\todo{Put JWT illustration here}
+\image[0.8\textwidth]{fig:jwt-token}{JWT token structure example}{jwt-example.pdf}
 
 Header contains information about token type and hashing algorithm used to generate signature.
 Payload is arbitrary \gls{json} object containing publicly visible data (such as user identifier).
-Token signature is created by hashing header and payload (both encoded using Base64 algorithm\footnote{Base64 -- https://www.techopedia.com/definition/27209/base64}) by algorithm specified in header and also encoded using Base64.
+Token signature is created by hashing header and payload (both encoded using Base64 algorithm) by hashing algorithm specified in header and also encoded using Base64.
 
 These three parts are combined using period (.) character and returned as \texttt{String}.
 
@@ -195,11 +193,9 @@ Research is able to see knowledge models and public questionnaires, but is able 
 
 As mentioned earlier in section \ref{sec:handler}, permissions are checked in handler before any business logic happens.
 Each handler has defined which permission is required (for example \texttt{Read questionnaire}).
-Once the user makes request, handler checks authentication state and search user's permissions.
+Once the user makes request, handler checks authentication state and search user's permissions (demonstrated in code example \ref{code:router-handler}).
 If user has granted required permissions, request processing continues.
 Otherwise the request is aborted immediately.
-
-\todo{Add permissions checking code sample here}
 
 \paragraph*{\gls{dao}}\label{sec:dao} is a way to access persisted data using simplified interface.
 In general, application data may be persisted in many ways.
@@ -220,7 +216,7 @@ In Haskell, such layer is implemented using independent modules where each modul
 The module public interface is implemented using free functions.
 Those functions offer high level API such as \texttt{findAll}, \texttt{findById} and similar for all \gls{crud} operations.
 
-\todo{Add DAO code example here}
+\hscode{code:dao}{DAO module example for Questionnaire entity}{dao.hs}
 
 \paragraph*{Mongo DB}\label{sec:mongo-db} was chosen as a persistent layer in early development of \gls{dsw}.
 As stated earlier in section \ref{sec:dao}, Mongo DB is an document database.
@@ -233,7 +229,7 @@ Mongo DB provides \gls{api} for querying objects using notation based on \gls{js
 This notation allows to query on nested objects, aggregations, relations or regular expressions.
 Since \gls{json} notation may be unnecessarily verbose, documents are internaly stored in \gls{bson} representation.
 
-\todo{Add mongo db query example}
+\jscode{code:mongo-find-one}{Mongo DB query for finding questionnaire using its identifier}{mongodb-findOne.js}
 
 In oppose to standard relational databases, collections and documents does not have an explicit schema.
 Therefore there might be stored almost any kind of data in collection at one time.
@@ -246,13 +242,10 @@ As mentioned before, the data are internally stored in binary format which is no
 Therefore the driver expose two special Typeclasses\footnote{More information about Haskell Typeclasses are available at https://www.haskell.org/tutorial/classes.html} for encoding and decoding binary formatted data.
 Such typeclasses must be implemented by all types which will be stored in database.
 
-\todo{Add mongo typeclass example}
+\hscode{code:bson-mapping}{Example of Typeclasses used to transform Model object into binary representation}{haskell-bson-mapping.hs}
 
 In addition to coding Typeclasses, the driver also expose type-safe interface to build \gls{crud} queries.
-These queries are created using simple \gls{dsl} as shown in example (??).
-
-\todo{Add mongo dsl example}
-
+These queries are created using simple \gls{dsl} as shown in example \ref{code:dao}.
 
 \subsection{Frontend application}
 
