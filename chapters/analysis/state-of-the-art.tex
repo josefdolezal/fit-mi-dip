@@ -253,4 +253,35 @@ These queries are created using simple \gls{dsl} as shown in example \ref{code:d
 
 \subsection{Knowledge model migrations}
 
+Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was built using \gls{json} notation.
+This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hoft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
+
+As knowledge models may change over time, it is required to keep track of all possible versions created in past.
+In terms of \gls{dsw}, such process of modifying knowledge model is called migration.
+The migration process was designed and implemented by Ing. Vojtěch Knaisl as a part of his master thesis\cite{mt-knaisl}.
+
+Migration consists of two parts: modification and upgrade.
+In the modification part, data steward may do \gls{crud} operations over all knowledge model nodes (this includes chapters, questions, answers, references and experts).
+Once the modifications are done, data steward publish new version of knowledge model so the modifications are available to other stewards.
+
+The second part, upgrade, is done on knowledge model customizations.
+These customizations may be for example localizations, which needs to reflect changes in its parent knowledge model.
+During upgrade, system asks data steward step by step for all knowledge model chagnes comming from parent knowledge model.
+Since modifications on a single node may be done on both customizations and parent knowledge model, conflicts may occure.
+
+In case of conflict, user is asked to solve it manually.
+There are two options for user to solve conflict.
+User may either accept incomming change (which will discard customization changes) or reject incomming change (which will in oppose prefer customization changes).
+Changes which do not cause conflict are merged automatically without user interaction.
+
+Once all conflicts are resolve, data steward is asked to complete migration by publishing new version of customization.
+
+On top of knowledge models, reasearchers creates and fills questionnaires which are later used to create data management plans.
+Questionnaires are currently tighly coupled to knowledge model they were initially created on.
+This however means, that once new version of knowledge model is released, new questionnaire has to be created and filled from scratch.
+
+As a result of this master's thesis, researchers will be able to migrate their questonnaires to newer version similary as data stewards are able to migrate knowledge models.
+
+\subsection{Event architecture}
+
 \subsection{Deployment}
