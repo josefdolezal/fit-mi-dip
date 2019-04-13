@@ -251,7 +251,7 @@ These queries are created using simple \gls{dsl} as shown in example \ref{code:d
 
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
-\subsection{Knowledge model migrations}
+\subsection{Knowledge model migrations}\label{sec:km-migrations}
 
 Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was built using \gls{json} notation.
 This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hoft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
@@ -282,6 +282,31 @@ This however means, that once new version of knowledge model is released, new qu
 
 As a result of this master's thesis, researchers will be able to migrate their questonnaires to newer version similary as data stewards are able to migrate knowledge models.
 
-\subsection{Event architecture}
+\subsection{Event-driven architecture}
+
+In previous section \ref{sec:km-migrations}, I discussed the idea behind having multiple versions of the same data source at once.
+In this section, I would like to briefly describe the technical details of that idea.
+
+In system representation, knowledge models are nothing more than sequence of modifiation events.
+Those events are strictly defined and must be always performed in order they were created.
+Single event represents one specific modification.
+This modification may be "Add chapter", "Add question" or "Remove answer".
+Together, system supports exactly twenty events where each of these events contains additional meta data.
+In Haskell, such structure is represented using multiple constructors of the same data type (example \ref{code:events}).
+
+\hscode{code:events}{Event representation in \gls{dsw}}{events.hs}
+
+This approach is generally known as \textit{event-driven architecture}\cite{mdm-event-architecture}.
+One of the main benefits for \gls{dsw} is that by repeatedly applying same events again, we always get same result.
+
+This works well with Mongo DB as persistence layer.
+Instead of compiling (by applying events) knowledge models and storing result in databse multiple times (for each custoization, questionnaire, \dots), only events are stored.
+When user requests compiled knowledge model, it is always compiled on demand presented using dto.
+Thanks to that, user always has the latest possible version without problems with inconsistency which would be possible over time.
+
+Another great feature of chain of events is that it can be easily manipulated.
+For example, merging two customizations of knowledge model may be easily done by applying one set of events on the end of the other chain.
+It also allows user to "cherry pick" events and apply only subset of incomming changes.
+Those properties are greatly utilized in knowledge model migrations mentioned earlier.
 
 \subsection{Deployment}
