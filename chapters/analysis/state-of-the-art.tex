@@ -273,8 +273,18 @@ To accomplish intercoporation between subapplications and standard Elm architect
 What is meant by composition is that every nested application screen state is managed by superior screen.
 Similar idea is used for update function where superior screen calls nested's screen update function.
 
-In the time of writing, client is composed from six subapplications, namely: \texttt{KMEditor}, \texttt{KnowledgeModels}, \texttt{Organization}, \texttt{Public}, \texttt{Questionnaires} and \texttt{Users}.
+In the time of writing, client is composed from six subapplications, namely: \texttt{Users}, \texttt{Questionnaires}, \texttt{KMEditor}, \texttt{KnowledgeModels}, \texttt{Organization} and \texttt{Public}.
 In following sections, I will shortly introduce reader to each of these.
+
+\subsection{Users module}
+
+This module is primarily used by system administrator.
+Administrator is able to list registred users, manage their profiles and roles.
+
+For each user, administrator may update user's profile information (including email) and change password.
+User also may be deleted or deactivated in order to not be able to use application further more.
+
+The rest of users are only allowed to update own profiles without being able to deactivate or delete it.
 
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
