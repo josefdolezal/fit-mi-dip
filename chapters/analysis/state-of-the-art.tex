@@ -42,7 +42,7 @@ The portal also has to support the following features in addition to the mention
 All of the mentioned functions are split into independent Haskell modules.
 The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in Haskell, inspired by Ruby's Sinatra. It is a lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
 
-\subsection{DSW-Client}
+\subsection{DSW-Client}\label{sec:dsw-client}
 
 DSW-Client is a frontend application written in Elm programming language\footnote{Elm is a type-safe programming language used for web applications frontend. The source code written in Elm is transpiled into JavaScript and interpreted using a web browser. Elm website: https://elm-lang.org.}.
 It provides a web-based user interface for the server application.
@@ -248,6 +248,33 @@ In addition to coding Typeclasses, the driver also expose type-safe interface to
 These queries are created using simple \gls{dsl} as shown in example \ref{code:dao}.
 
 \subsection{Frontend application}
+
+In this section, I will in detail discuss approach of development of the frontend (client) application.
+As stated earlier in section \ref{sec:dsw-client}, this part of the application is written using functional language Elm.
+
+Even though Haskell and Elm have similar syntax, the application structure is completely different.
+Elm application entrypoint is an module called \texttt{Main}.
+This module's responsibility is to initialize the application in browser window and set its state based on current browser \gls{url}.
+
+The application view is basically function of state.
+Every time the state changes, the view function is called with latest state value and returns corresponding \gls{ui} elements.
+The resulting view is then passed to Elm runtime.
+
+Runtime will compare the given view with current \gls{dom}\footnote{HTML DOM is a tree of web document (page) objects. It is used to create dynamic HTML modifieable by JavaScript. More information about DOM are avaialbe at W3C documentation: https://www.w3schools.com/js/js\_htmldom.asp.} and applies only appropriate modifications.
+Since rendering the whole \gls{dom} may be slow\cite{accelebrate-slow-dom}, Elm may group multiple changes and render them at once.
+This means browser does not have to render the whole tree so often and the user experience may increase.
+
+For as extensive application as \gls{dsw} is, it is not possible to keep the architecture that simple.
+Instead, for each screen new module with same architecture is created.
+In the rest of this thesis, I will refer to such modules as "subapplicatons" for clarity.
+This means that state update, view functions and messages are created from scratch for each screen.
+To accomplish intercoporation between subapplications and standard Elm architecture, composition is used.
+
+What is meant by composition is that every nested application screen state is managed by superior screen.
+Similar idea is used for update function where superior screen calls nested's screen update function.
+
+In the time of writing, client is composed from six subapplications, namely: \texttt{KMEditor}, \texttt{KnowledgeModels}, \texttt{Organization}, \texttt{Public}, \texttt{Questionnaires} and \texttt{Users}.
+In following sections, I will shortly introduce reader to each of these.
 
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
