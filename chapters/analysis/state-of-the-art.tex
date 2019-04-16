@@ -345,12 +345,29 @@ In new version, users will be able to see overview of final questionnaire right 
 
 \todo{Add KMEditor screenshot}
 
+\subsection{Knowledge models module}
+
+This module partialy groups features from both \texttt{Questionnaires} and \texttt{KMEditor} modules.
+The main difference is, that this screen directly operate with knowledge models, instead of customizations.
+This however is not a significant difference because all published customizations are listed in knowledge models too.
+For the rest of the features, all users may see knowledge models with its detail, create questionnaire or new customization.
+
+The last feature is related to system interoperability.
+Users are allowed to both import new knowledge models or export existing in \gls{json} format.
+
+This is important feature as base knowledge may in theory be created anyone -- either by individuals or by enterprises.
+Such models then could be shared publicly and used arbitrary instance of \gls{dsw}.
+
+Even today, importing models is very useful feature.
+The default installation package of \gls{dsw} is currently shiped without any content.
+However, the intial base model (described later in section \ref{sec:km-migrations}) maintained by Mr. Rob Hooft is shared publicly and can be easily imported.
+
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
 \subsection{Knowledge model migrations}\label{sec:km-migrations}
 
 Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was previously built using \gls{json} notation.
-This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hoft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
+This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hooft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
 
 As knowledge models may change over time, it is required to keep track of all possible versions created in past.
 In terms of \gls{dsw}, such process of modifying knowledge model is called migration.
