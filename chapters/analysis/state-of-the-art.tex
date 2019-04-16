@@ -247,7 +247,7 @@ Such typeclasses must be implemented by all types which will be stored in databa
 In addition to coding Typeclasses, the driver also expose type-safe interface to build \gls{crud} queries.
 These queries are created using simple \gls{dsl} as shown in example \ref{code:dao}.
 
-\subsection{Frontend application}
+\subsection{Frontend application}\label{sec:frontend-application}
 
 In this section, I will in detail discuss approach of development of the frontend (client) application.
 As stated earlier in section \ref{sec:dsw-client}, this part of the application is written using functional language Elm.
@@ -276,7 +276,7 @@ Similar idea is used for update function where superior screen calls nested's sc
 In the time of writing, client is composed from six subapplications, namely: \texttt{Users}, \texttt{Questionnaires}, \texttt{KMEditor}, \texttt{KnowledgeModels}, \texttt{Organization} and \texttt{Public}.
 In following sections, I will shortly introduce reader to each of these.
 
-\subsection{Users module}
+\subsection{Users module}\label{sec:users-module}
 
 This module is primarily used by system administrator.
 Administrator is able to list registred users, manage their profiles and roles.
@@ -285,6 +285,31 @@ For each user, administrator may update user's profile information (including em
 User also may be deleted or deactivated in order to not be able to use application further more.
 
 The rest of users are only allowed to update own profiles without being able to deactivate or delete it.
+
+\subsection{Questionnaires module}\label{sec:questionnaires-module}
+
+Questionnaires module has two parts available to all user roles.
+As each of those parts contains complex logic (such network calls and state management), it's also separated into individual subapplications.
+
+The first part is a list of existing questionnaires with ability to create new one.
+Each user is able to see either public questionnaires or private questionnaires he or she created.
+By selecting questionnaire, user can see questionnaire detail.
+
+The second part is possibility to fill questionnaire and generate data management plan.
+User fills questionnaire by answering set of questions from knowledge model which was selected during process of creating the questionnaire.
+Some of the questions have assigned \gls{fair} metrics.
+By selecting an answer for question, its metrics may positively or negatively affect the overall questionnaire.
+
+Since researched project state may change over time, user is able to change its phase in questionnaire.
+As some questions are only desired in a specific project phase, this action will also probably affect set questions which needs to be answered.
+
+Questions are designed to be infinitely nested and composed using other questions.
+Nested questions are in terms of \gls{dsw} called \texttt{Item Templates}.
+In order to answer such question, user is required to create item answer and reply to all nested questions in it.
+
+Another type of nested question are follow-up questions for answer item (from single choice list).
+The application is designed to make follow-up questions optional for items which does not require it.
+Since questionnaires may easily become complex and hard to orientate, follow-up questions are not visible until appropriate answer is selected.
 
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
