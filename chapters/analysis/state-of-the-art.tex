@@ -311,11 +311,45 @@ Another type of nested question are follow-up questions for answer item (from si
 The application is designed to make follow-up questions optional for items which does not require it.
 Since questionnaires may easily become complex and hard to orientate, follow-up questions are not visible until appropriate answer is selected.
 
+\subsection{KMEditor module}\label{sec:kmeditor-module}
+
+In section \ref{sec:km-migrations} about knowledge models migration, I will describe how editing knowledge models is designed and implemented.
+In this section, I will describe how the \gls{ui} of customizing knowledge models work.
+
+\texttt{KMEditor module} is mainly designed for data stewards (even though it is available to other roles too) .
+Stewards are allowed to list existing knowledge models customizations or create a new one.
+We can understand customization as a new branch of existing (or even new) knowledge model which contains changes from the superior knowledge model.
+
+Together with listing existing customizations, user is able to create a new one.
+When creating a new one, user is asked to either select superior knowledge model or start from scratch.
+In both options, new screen is displayed with details of customization.
+
+Editor allows to manage the whole knowledge model structure mentioned earlier: Chapters, Questions, Answers, References and Experts.
+All of these may be added, modified or deleted.
+Changes are synchronized to the server in a batch once the user decides to explicitly save current version of knowledge model.
+
+Nodes overview is displayed in a hierarchical tree view where modified nodes are highlighted using appropriate color.
+Navigation in knowledge model is done using either tree view on the left side of the screen or from selected node overview on the right side.
+
+Node overview displays configuration specific to each node type together with its nested nodes.
+
+During time of writing this thesis, new capabilities for editor are currently in development its maintainers.
+The first one allows to tag questions.
+This helps categorize questions into logical groups by its.
+Later, while creating new questionnaire, data steward is able to pick only questions having specified tags, which are for the questionnaire valid.
+
+The second one is knowledge model preview.
+Currently, there is no way to quickly preview how questionnaire built on edited knowledge model will looklike.
+To do that, user is required to save and publish the knowledge model and thne create questionnaire to see the \gls{ui}.
+In new version, users will be able to see overview of final questionnaire right in the editor without a need to publish unfinished customization.
+
+\todo{Add KMEditor screenshot}
+
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
 \subsection{Knowledge model migrations}\label{sec:km-migrations}
 
-Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was built using \gls{json} notation.
+Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was previously built using \gls{json} notation.
 This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hoft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
 
 As knowledge models may change over time, it is required to keep track of all possible versions created in past.
