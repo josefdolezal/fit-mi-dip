@@ -1,0 +1,172 @@
+\section{Server-side application}
+
+As mentioned earlier the server part of the application is written using Haskell programming language, specifically using Scotty web framework.
+The application expose public \gls{rest} \glsentryshort{api} over \glsentryshort{http} protocol.
+
+To achieve modularity and loose coupling, the application is split into multiple modules.
+Those modules are grouped into logical partitions based on their purpose.
+The most significant parts are:
+
+\begin{itemize}
+    \item Handler layer,
+    \item Service \gls{dto} layers,
+    \item Model and \gls{dao} layers,
+\end{itemize}
+
+\subsection{Handler layer}\label{sec:handler} is responsible for processing \gls{api} requests.
+It directly interacts with Scotty framework, transforms incomming data into strongly typed objects and orchestrates other layers to evaluate response.
+
+Handler groups together multiple endopoints.
+Those endpoints are uniquely registred to specific \gls{url} and \gls{http} method.
+In terms of server application, we refer to such pair as \textit{route}.
+
+\hscode{code:router-handler}{Routes definition and route endpoint (simplified)}{router-handler.hs}
+
+Once the correct handler for requested route is selected, it starts processing data from request.
+Such data might be \gls{url} (or query) parameters and request body.
+Those data are transformed into language primitives (such as \texttt{Int} or \texttt{String}) or complex objects called \gls{dto} (explained later).
+In case of invalid or malformed data, the request is aborted immediately with appropriate error information in response.
+
+In addition to that, some routes may also require special permissions in order to be executed.
+Those routes needs requests to be authenticated using \gls{jwt} technology and user tied with given token must be granted such permissions.
+
+If the request is validated successfully, required data are passed into service layer where the actual business logic happens.
+
+\subsection{Service layer} is responsible for application logic.
+This means, that its public interface is exposed to other layers using \gls{dto}.
+Private functions and internal dependencies (such as data persistence) are thus \textit{implementation detail} of the layer itself and does not affect its interface.
+
+In \gls{dsw}, service layer takes care of basic \gls{crud} operations over persisted entities.
+This includes basic objects, for example \texttt{User}, \texttt{KnowledgeModel} and \texttt{Questionnaire}.
+
+In addition to data transformation, this layer also manages application configuration, knowledge model migrations, \gls{dto} mapping and maintains data consistency.
+To keep the public interface simple, services are usually composed using other services or \gls{dao}.
+
+Services makes operations based on given input data (objects identifiers, \gls{dto}, \dots).
+Operations itself then converts \gls{dto} objects into internal representation (persisted object) and do computations on it.
+As a result of computation, \gls{dto} object is returned from service.
+
+\subsection{\gls{dto}} While describing Service layer earlier in this chapter, there were multiple references to objects called \gls{dto}.
+These objects' goal is to create framework-independent interface between layers.
+\gls{dto} are plain objects\footnote{By plain objects we usually mean structures, which are not restrcited by any framework and are built only constructs available in language itself or by other plain objects. Same pattern is available in other languages. In Java programming language, same concept is refered to as \gls{pojo}\cite{wiki-pojo}.} representing standard model objects, usually in many ways.
+
+Model objects may be complex structures containing significant amount of data.
+Such complexity may or may not be appropriate for some service operations.
+
+While presenting list of data (populated by \gls{dto}) to the user, it is not necessary to fetch all nested objects recursively.
+Instead, simplified objects may be used and additional data may be requested on demand.
+On the other hand, when user want to see detail of some list item, \gls{dto} object should contain enough data to fulfill user's expectaion.
+For such usecase, there would be two different objects and service would choose the one which best fits user expectation.
+
+\hscode{code:dto}{DTO definition and transformation from Model object}{dto.hs}
+
+In \gls{dsw} this approach is used to display either list or detail of questionnaires, knowledge models or knowledge model customizations.
+Conversion between model and \gls{dto} objects are done using specific services.
+
+\subsection{Authentication} In section \ref{sec:handler} about \gls{http} requests handling, I briefly discussed endpoint authentication using \gls{jwt}.
+In this section the reader will be acquainted with how these tokens work.
+
+Even though some endpoints (such as login or registration) do not require user to be authenticated, vast majority of the application is based on managing private data.
+Therefore, the user needs to be authenticated using username and password before he or she can access these data.
+Similary to data persistence, also authentication may be done in many ways.
+There is basic authorization\footnote{Base64 is an HTTP authentication used to directly encode user's credentials into reuqest header. Such approach is considered as insecure as the credentials are easily captured by unauthorized person\cite{qnimate-base64}.}, API keys, \gls{jwt} and many more.
+
+The \gls{dsw} application uses \gls{jwt} tokens, which stands out by having ability to be verified for issuer authenticity.
+Thanks to this, the issuer (in this case server application) can embed custom payload into token and be sure those data will not be modified by unauthorized person.
+
+To become authorized, user first have to log in to application using username and password.
+If those credentials are correct, server will issue access token and send it back to the user.
+For all request requiring authorization, the user has to send issued token in request header.
+Server will read the payload, verify token integrity and check his permissions.
+If the token is valid, appropriate handler is called.
+
+All \gls{jwt} tokens have same structure (pictured in figure \ref{fig:jwt-token}).
+The token consists from three parts: \texttt{Header}, \texttt{Payload} and \texttt{Signature}.
+
+\image[0.8\textwidth]{fig:jwt-token}{JWT token structure example}{jwt-example.pdf}
+
+Header contains information about token type and hashing algorithm used to generate signature.
+Payload is arbitrary \gls{json} object containing publicly visible data (such as user identifier).
+Token signature is created by hashing header and payload (both encoded using Base64 algorithm) by hashing algorithm specified in header and also encoded using Base64.
+
+These three parts are combined using period (.) character and returned as \texttt{String}.
+
+\subsection{Authorization}
+
+In modern application, authenticating users is not enough.
+We might want a system to support to support wide range users hierarchy, capabilities and responsibilities.
+In \gls{dsw} this is solved using combinations of roles and permissions.
+
+Each user has one of the following roles:
+
+\begin{itemize}
+    \item Administrator,
+    \item Data Steward,
+    \item Researcher
+\end{itemize}
+
+Once user is created, he has assinged role and default set of permissions.
+Having two levels of authorization is an important system feature as user's account might gain or lose priviledges over its lifetime.
+
+Permissions are resource specific and for each resource we might distinguish between multiple permissions (for example read and write permissions).
+Default permissons are system-wide configurable using configuration file (which is loaded at startup time).
+
+In default environment, Administrator has all possible permissions including user, organization and content management.
+The role in heirarchy just under the Administrator -- Data Steward -- has similar permissions but is unable to manage organizations and other users.
+Research is able to see knowledge models and public questionnaires, but is able to only modify content he created.
+
+As mentioned earlier in section \ref{sec:handler}, permissions are checked in handler before any business logic happens.
+Each handler has defined which permission is required (for example \texttt{Read questionnaire}).
+Once the user makes request, handler checks authentication state and search user's permissions (demonstrated in code example \ref{code:router-handler}).
+If user has granted required permissions, request processing continues.
+Otherwise the request is aborted immediately.
+
+\subsection{\gls{dao}}\label{sec:dao} is a way to access persisted data using simplified interface.
+In general, application data may be persisted in many ways.
+The most common approach to this is using database. \todo{Add cite here}
+But even database persitence may be implemented in different ways.
+
+On the marked, there are several options available.
+There are various kinds of databases: Graph databases, Relational databases, Document databases and many others.
+Moreover, all of those offered as free to use as well as business solutions.
+
+In \gls{dsw}, the Mongo DB was chosen as a dabatase for persisting data.
+Mongo DB is an NoSQL document databse (explained later), which allows to store data using nested structures.
+
+The goal of \gls{dao} is to encapsulate such technical detail from other application layers.
+The underlying database may change over time, but as long as data model stays the same, the only affected layer will be \gls{dao}.
+
+In Haskell, such layer is implemented using independent modules where each module manages one resource (Mongo DB collection).
+The module public interface is implemented using free functions.
+Those functions offer high level API such as \texttt{findAll}, \texttt{findById} and similar for all \gls{crud} operations.
+
+\hscode{code:dao}{DAO module example for Questionnaire entity}{dao.hs}
+
+\subsection{Mongo DB}\label{sec:mongo-db} was chosen as a persistent layer in early development of \gls{dsw}.
+As stated earlier in section \ref{sec:dao}, Mongo DB is an document database.
+
+By document document dabase, we understand system which is able to store hierarchical tree structures (so called \textit{docuemnts}) composed using scalars (\texttt{String}, \texttt{Integer}, \dots), hashable maps, arrays or nested documents.
+These documents are identified using internal unique identifiers and grouped into collections.
+
+On collections, we can run standard \gls{crud} queries to manipulate with stored data.
+Mongo DB provides \gls{api} for querying objects using notation based on \gls{json}.
+This notation allows to query on nested objects, aggregations, relations or regular expressions.
+Since \gls{json} notation may be unnecessarily verbose, documents are internaly stored in \gls{bson} representation.
+
+\jscode{code:mongo-find-one}{Mongo DB query for finding questionnaire using its identifier}{mongodb-findOne.js}
+
+In oppose to standard relational databases, collections and documents does not have an explicit schema.
+Therefore there might be stored almost any kind of data in collection at one time.
+
+Another notable difference is in data normalization.
+Standard databases (based on \gls{sql}) use data decompozition and normalization to achieve better performance and great organisation of tables and columns.
+In case of Mongo DB, related documents are usually tightly coupled together (using composition) and duplicated instead of relations using foreign keys.
+
+As mentioned before, the data are internally stored in binary format which is not directly usable in Haskell.
+Therefore the driver expose two special Typeclasses\footnote{More information about Haskell Typeclasses are available at https://www.haskell.org/tutorial/classes.html} for encoding and decoding binary formatted data.
+Such typeclasses must be implemented by all types which will be stored in database.
+
+\hscode{code:bson-mapping}{Example of Typeclasses used to transform Model object into binary representation}{haskell-bson-mapping.hs}
+
+In addition to coding Typeclasses, the driver also expose type-safe interface to build \gls{crud} queries.
+These queries are created using simple \gls{dsl} as shown in example \ref{code:dao}.

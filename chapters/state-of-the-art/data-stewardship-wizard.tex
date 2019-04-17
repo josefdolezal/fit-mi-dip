@@ -1,0 +1,16 @@
+\section{Data Stewardship Wizard}
+
+As has been already stated, the DSW application is being developed in cooperation of ELIXIR CZ and ELIXIR NL research groups.
+The development is currently split into multiple independent parts.
+
+The whole system is available as an open-source\footnote{Application repositories are available at GitHub under the organization page at https://github.com/ds-wizard.}.
+That said, the source code, documentation, and the development process are publicly accessible and open to contribution.
+
+The most significant part of the project is the server application called DSW-Server (in \gls{dsw} terminology called \textit{portal}).
+This application implements all the functionality and business logic of the system.
+Using standard terminology, we can refer to it as a backend.
+
+Since the portal application does not provide any \gls{ui} (it only exposes \glsentryshort{api} using \glsentryshort{rest} standard), there is an complementary web application called DSW-Client (or, in \gls{dsw} terminology, called just \textit{client} for short) which does just that.
+Using standard terminology, such application is refered to as a frontend.
+
+\todo{Make sure the server part description and development state are both correct}

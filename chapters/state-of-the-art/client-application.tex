@@ -1,0 +1,145 @@
+\section{Frontend application}\label{sec:frontend-application}
+
+In this section, I will in detail discuss approach of development of the frontend (client) application.
+As stated earlier in section \ref{sec:dsw-client}, this part of the application is written using functional language Elm.
+
+Even though Haskell and Elm have similar syntax, the application structure is completely different.
+Elm application entrypoint is an module called \texttt{Main}.
+This module's responsibility is to initialize the application in browser window and set its state based on current browser \gls{url}.
+
+The application view is basically function of state.
+Every time the state changes, the view function is called with latest state value and returns corresponding \gls{ui} elements.
+The resulting view is then passed to Elm runtime.
+
+Runtime will compare the given view with current \gls{dom}\footnote{HTML DOM is a tree of web document (page) objects. It is used to create dynamic HTML modifieable by JavaScript. More information about DOM are avaialbe at W3C documentation: https://www.w3schools.com/js/js\_htmldom.asp.} and applies only appropriate modifications.
+Since rendering the whole \gls{dom} may be slow\cite{accelebrate-slow-dom}, Elm may group multiple changes and render them at once.
+This means browser does not have to render the whole tree so often and the user experience may increase.
+
+For as extensive application as \gls{dsw} is, it is not possible to keep the architecture that simple.
+Instead, for each screen new module with same architecture is created.
+In the rest of this thesis, I will refer to such modules as "subapplicatons" for clarity.
+This means that state update, view functions and messages are created from scratch for each screen.
+To accomplish intercoporation between subapplications and standard Elm architecture, composition is used.
+
+What is meant by composition is that every nested application screen state is managed by superior screen.
+Similar idea is used for update function where superior screen calls nested's screen update function.
+
+In the time of writing, client is composed from six subapplications, namely: \texttt{Users}, \texttt{Questionnaires}, \texttt{KMEditor}, \texttt{KnowledgeModels}, \texttt{Organization} and \texttt{Public}.
+In following sections, I will shortly introduce reader to each of these.
+
+\subsection{Users module}\label{sec:users-module}
+
+This module is primarily used by system administrator.
+Administrator is able to list registred users, manage their profiles and roles.
+
+For each user, administrator may update user's profile information (including email) and change password.
+User also may be deleted or deactivated in order to not be able to use application further more.
+
+The rest of users are only allowed to update own profiles without being able to deactivate or delete it.
+
+\subsection{Questionnaires module}\label{sec:questionnaires-module}
+
+Questionnaires module has two parts available to all user roles.
+As each of those parts contains complex logic (such network calls and state management), it's also separated into individual subapplications.
+
+The first part is a list of existing questionnaires with ability to create new one.
+Each user is able to see either public questionnaires or private questionnaires he or she created.
+By selecting questionnaire, user can see questionnaire detail.
+
+The second part is possibility to fill questionnaire and generate data management plan.
+User fills questionnaire by answering set of questions from knowledge model which was selected during process of creating the questionnaire.
+Some of the questions have assigned \gls{fair} metrics.
+By selecting an answer for question, its metrics may positively or negatively affect the overall questionnaire.
+
+Since researched project state may change over time, user is able to change its phase in questionnaire.
+As some questions are only desired in a specific project phase, this action will also probably affect set questions which needs to be answered.
+
+Questions are designed to be infinitely nested and composed using other questions.
+Nested questions are in terms of \gls{dsw} called \texttt{Item Templates}.
+In order to answer such question, user is required to create item answer and reply to all nested questions in it.
+
+Another type of nested question are follow-up questions for answer item (from single choice list).
+The application is designed to make follow-up questions optional for items which does not require it.
+Since questionnaires may easily become complex and hard to orientate, follow-up questions are not visible until appropriate answer is selected.
+
+\subsection{KMEditor module}\label{sec:kmeditor-module}
+
+In section \ref{sec:km-migrations} about knowledge models migration, I will describe how editing knowledge models is designed and implemented.
+In this section, I will describe how the \gls{ui} of customizing knowledge models work.
+
+\texttt{KMEditor module} is mainly designed for data stewards (even though it is available to other roles too) .
+Stewards are allowed to list existing knowledge models customizations or create a new one.
+We can understand customization as a new branch of existing (or even new) knowledge model which contains changes from the superior knowledge model.
+
+Together with listing existing customizations, user is able to create a new one.
+When creating a new one, user is asked to either select superior knowledge model or start from scratch.
+In both options, new screen is displayed with details of customization.
+
+Editor allows to manage the whole knowledge model structure mentioned earlier: Chapters, Questions, Answers, References and Experts.
+All of these may be added, modified or deleted.
+Changes are synchronized to the server in a batch once the user decides to explicitly save current version of knowledge model.
+
+Nodes overview is displayed in a hierarchical tree view where modified nodes are highlighted using appropriate color.
+Navigation in knowledge model is done using either tree view on the left side of the screen or from selected node overview on the right side.
+
+Node overview displays configuration specific to each node type together with its nested nodes.
+
+During time of writing this thesis, new capabilities for editor are currently in development its maintainers.
+The first one allows to tag questions.
+This helps categorize questions into logical groups by its.
+Later, while creating new questionnaire, data steward is able to pick only questions having specified tags, which are for the questionnaire valid.
+
+The second one is knowledge model preview.
+Currently, there is no way to quickly preview how questionnaire built on edited knowledge model will looklike.
+To do that, user is required to save and publish the knowledge model and thne create questionnaire to see the \gls{ui}.
+In new version, users will be able to see overview of final questionnaire right in the editor without a need to publish unfinished customization.
+
+\todo{Add KMEditor screenshot}
+
+\subsection{Knowledge models module}
+
+This module partialy groups features from both \texttt{Questionnaires} and \texttt{KMEditor} modules.
+The main difference is, that this screen directly operate with knowledge models, instead of customizations.
+This however is not a significant difference because all published customizations are listed in knowledge models too.
+For the rest of the features, all users may see knowledge models with its detail, create questionnaire or new customization.
+
+The last feature is related to system interoperability.
+Users are allowed to both import new knowledge models or export existing in \gls{json} format.
+
+This is important feature as base knowledge may in theory be created anyone -- either by individuals or by enterprises.
+Such models then could be shared publicly and used arbitrary instance of \gls{dsw}.
+
+Even today, importing models is very useful feature.
+The default installation package of \gls{dsw} is currently shiped without any content.
+However, the intial base model (described later in section \ref{sec:km-migrations}) maintained by Mr. Rob Hooft is shared publicly and can be easily imported.
+
+\subsection{Organization module}
+
+Organization management is a simple module which allows administrator to manage basic information (currently only name and identifier) of organization operating given instance of the application.
+These informations are mostly used to identify knowledge models created by the organization and to add metadata to exported data management plans.
+
+\subsection{Public module}
+
+Public module groups all subapplications which are accessible without being logged in to the system.
+Those modules are:
+
+\begin{itemize}
+    \item Login,
+    \item Registration,
+    \item Public questionnaire.
+\end{itemize}
+
+Login module is predominantly self-explanatory.
+It is and landing page for not logged-in users who are prompted to enter credentials.
+After successfull login, server will issue \gls{jwt} access token which will authorize user to see private pages.
+
+Registration module is similary simple.
+It is designed for users who are not signed up to the system yet and wants to use it.
+After successfull registration, user is required to confirm his email address and activate account.
+Once the profile is activated, user able to to log in to system.
+
+Last part is a public questionnaire.
+This servers as an application demo which allows unauthenticated researchers to fill prepared questionnaire.
+Since the public questionnaire is for demonstration purpose only, its data answers are not stored anywhere and will be forgotten once user leaves the screen.
+
+\image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}

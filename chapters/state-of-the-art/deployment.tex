@@ -1,0 +1,20 @@
+\section{Deployment}
+
+In previous sections I described the architecture of \gls{dsw} distributed system.
+This section dedicated to production environment of this application.
+
+Since both parts of the system are independent, deployment of the whole app is done in two steps.
+In one step, the server side application is deployed.
+As discussed earlier, Haskell application does not need application server (the requests are handled directly by the application) but depends on persistence layer.
+To make the deployed application lose coupled, two Docker containers\footnote{Docker is a development and deployment tool using containers to package up an application (together with its dependencies) and deploy it as a single package. Containers utilize hosts OS kernel instead of creting virtual machine and virtual OS \cite{ms-docker}.} are used to decouple application itself from database.
+To connect the containers, Docker compose is used to make private network between them.
+From the user perspective, the application behaves as monolith which internally encapsulates its complexity.
+
+In the second step, the client application is deployed in similar manner.
+Since Elm application actually runs in user's internet browser, there is an additional container which handles \gls{http} requests and servers the application to the user.
+This container may ber arbitrary \gls{http} server.
+For purpose of \gls{dsw}, the Nginx HTTP server was chosen.
+Nginx is configured to return empty \gls{http} document which links compiled Elm application.
+The actual logic (including routing) is handled in localy in browser.
+
+\todo {Add docker archi figure}

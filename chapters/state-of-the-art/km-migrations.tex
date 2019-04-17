@@ -1,0 +1,57 @@
+\section{Knowledge model migrations}\label{sec:km-migrations}
+
+Initially, the \gls{dsw} portal was created as an user-friendly alternative to knowledge model management which was previously built using \gls{json} notation.
+This notation was originally created and maintained by Rob Hooft\footnote{Rob Hooft is an manager of Netherland node of ELIXIR group (ELIXIR NL). Mr. Hooft created the initial knowledge model data source which is currently used in \gls{dsw} as an optional component.} and is still used as core knowledge model in \gls{dsw}.
+
+As knowledge models may change over time, it is required to keep track of all possible versions created in past.
+In terms of \gls{dsw}, such process of modifying knowledge model is called migration.
+The migration process was designed and implemented by Ing. Vojtěch Knaisl as a part of his master thesis\cite{mt-knaisl}.
+
+Migration consists of two parts: modification and upgrade.
+In the modification part, data steward may do \gls{crud} operations over all knowledge model nodes (this includes chapters, questions, answers, references and experts).
+Once the modifications are done, data steward publish new version of knowledge model so the modifications are available to other stewards.
+
+The second part, upgrade, is done on knowledge model customizations.
+These customizations may be for example localizations, which needs to reflect changes in its parent knowledge model.
+During upgrade, system asks data steward step by step for all knowledge model chagnes comming from parent knowledge model.
+Since modifications on a single node may be done on both customizations and parent knowledge model, conflicts may occure.
+
+In case of conflict, user is asked to solve it manually.
+There are two options for user to solve conflict.
+User may either accept incomming change (which will discard customization changes) or reject incomming change (which will in oppose prefer customization changes).
+Changes which do not cause conflict are merged automatically without user interaction.
+
+Once all conflicts are resolve, data steward is asked to complete migration by publishing new version of customization.
+
+On top of knowledge models, reasearchers creates and fills questionnaires which are later used to create data management plans.
+Questionnaires are currently tighly coupled to knowledge model they were initially created on.
+This however means, that once new version of knowledge model is released, new questionnaire has to be created and filled from scratch.
+
+As a result of this master's thesis, researchers will be able to migrate their questonnaires to newer version similary as data stewards are able to migrate knowledge models.
+
+\subsection{Event-driven architecture}
+
+In previous section \ref{sec:km-migrations}, I discussed the idea behind having multiple versions of the same data source at once.
+In this section, I would like to briefly describe the technical details of that idea.
+
+In system representation, knowledge models are nothing more than sequence of modifiation events.
+Those events are strictly defined and must be always performed in order they were created.
+Single event represents one specific modification.
+This modification may be "Add chapter", "Add question" or "Remove answer".
+Together, system supports exactly twenty events where each of these events contains additional meta data.
+In Haskell, such structure is represented using multiple constructors of the same data type (example \ref{code:events}).
+
+\hscode{code:events}{Event representation in \gls{dsw}}{events.hs}
+
+This approach is generally known as \textit{event-driven architecture}\cite{mdm-event-architecture}.
+One of the main benefits for \gls{dsw} is that by repeatedly applying same events again, we always get same result.
+
+This works well with Mongo DB as persistence layer.
+Instead of compiling (by applying events) knowledge models and storing result in databse multiple times (for each custoization, questionnaire, \dots), only events are stored.
+When user requests compiled knowledge model, it is always compiled on demand presented using dto.
+Thanks to that, user always has the latest possible version without problems with inconsistency which would be possible over time.
+
+Another great feature of chain of events is that it can be easily manipulated.
+For example, merging two customizations of knowledge model may be easily done by applying one set of events on the end of the other chain.
+It also allows user to "cherry pick" events and apply only subset of incomming changes.
+Those properties are greatly utilized in knowledge model migrations mentioned earlier.

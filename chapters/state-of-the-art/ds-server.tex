@@ -1,0 +1,26 @@
+\subsection{DSW-Server}\label{sec:dsw-server}
+
+The backend part of the application is written using the Haskell programming language.
+The primary goal of this portal is to create data management plans. \reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
+At least one knowledge model must be added to the system before data plans can be generated.
+At the time of writing, \gls{dsw} is shipped with a prebuild knowledge model called \textit{core}.
+
+Knowledge models are represented using \gls{json} and stored in a file on the server file system.
+Data stewards then use these models to create questionaries.
+The role of researchers is to fill in the questionaries with meta information about their research.
+
+Filled-in questionaries are used by data stewards to create management plans.
+This flow mostly covers system features.
+
+We, however, have silent assumptions in the flow described above.
+The portal also has to support the following features in addition to the mentioned business logic:
+
+\begin{itemize}
+    \item User management (roles, authorization and authentication),
+    \item Package administration (cration, editing and versioning),
+    \item Data persistency (database connection, file system integration)
+    \item \glsentryshort{rest} \glsentryshort{api}.
+\end{itemize}
+
+All of the mentioned functions are split into independent Haskell modules.
+The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in Haskell, inspired by Ruby's Sinatra. It is a lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
