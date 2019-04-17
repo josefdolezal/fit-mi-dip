@@ -8,6 +8,7 @@
 \usepackage{dirtree}
 \usepackage[acronym]{glossaries}
 \usepackage{todonotes}
+\usepackage{scrextend} % Paragraph margin
 
 % Colors
 \definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
@@ -44,6 +45,15 @@
 	\caption{\label{#1}#2}
 	\inputminted[linenos, bgcolor=bgcode]{js}{assets/code-examples/#3}
 \end{listing}
+}
+
+% Functional and non-functional requirements
+\newcommand{\requirement}[2]{%
+\begin{addmargin}[3em]{0em}
+	\subsubsection*{#1}
+
+	#2
+\end{addmargin}
 }
 
 \makeglossaries

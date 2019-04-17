@@ -1,5 +1,48 @@
 \section{Requirements}\label{sec:requirements}
 
+In this section, I will define functional and non-functional requirements for the \gls{dsw} portal.
+
 \subsection{Functional requirements}\label{sec:functional-requirements}
+
+This section will introduce list of identified functional requirements to the reader.
+The requirements are following:
+
+\requirement{FR1 -- User is notified about available upgrade}{%
+User is visually notified when newer version of knowledge model is available for given questionnaire.
+}
+
+\requirement{FR2 -- Create questionnaire migration}{%
+This requirement enables user to create new questionnaire migration from current knowledge model to its newer version.
+}
+
+\requirement{FR3 -- Explore questionnaire on new knowledge model}{%
+User is able to see preview of migrated questionnaire before the questionnaire is fully migrated.
+This includes preview of all questionnaire nodes together with answer from previous knowledge model version.
+}
+
+\requirement{FR4 -- Guide user through list of changes}{%
+User is guided by system through changes relevant to migrated questionnaire.
+}
+
+\requirement{FR5 -- Resolve question change}{%
+Question change may be marked as resolved so user does not have to remember which changes needs to be reviewed before the questionnaire is migrated.
+}
+
+\requirement{FR6 -- Display node difference betweeen versions}{%
+Questionnaire nodes are shown in both old version and new version with visual representation of textual changes (removed, changed or added characters).
+}
+
+\requirement{FR7 -- Mark question change for review}{%
+Allows user to mark questions which needs to be carefully reviewed once the migration is done.
+This enables user to adjust open-ended answers or choose different choose different answer in hierarchical tree.
+}
+
+\requirement{FR8 -- Migrate questionnaire}{%
+User is allowed to finish migration and upgrade questionnaire knowledge model version.
+}
+
+\requirement{FR9 -- Cancel questionnaire migraiton}{%
+Questionnaire migration which was not finished by user may be canceled without affecting current questionnaire.
+}
 
 \subsection{Non-functional requirements}\label{sec:non-functional-requirements}
