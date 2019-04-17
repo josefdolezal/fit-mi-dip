@@ -362,10 +362,34 @@ Even today, importing models is very useful feature.
 The default installation package of \gls{dsw} is currently shiped without any content.
 However, the intial base model (described later in section \ref{sec:km-migrations}) maintained by Mr. Rob Hooft is shared publicly and can be easily imported.
 
-\subsection{Organization}
+\subsection{Organization module}
 
 Organization management is a simple module which allows administrator to manage basic information (currently only name and identifier) of organization operating given instance of the application.
 These informations are mostly used to identify knowledge models created by the organization and to add metadata to exported data management plans.
+
+\subsection{Public module}
+
+Public module groups all subapplications which are accessible without being logged in to the system.
+Those modules are:
+
+\begin{itemize}
+    \item Login,
+    \item Registration,
+    \item Public questionnaire.
+\end{itemize}
+
+Login module is predominantly self-explanatory.
+It is and landing page for not logged-in users who are prompted to enter credentials.
+After successfull login, server will issue \gls{jwt} access token which will authorize user to see private pages.
+
+Registration module is similary simple.
+It is designed for users who are not signed up to the system yet and wants to use it.
+After successfull registration, user is required to confirm his email address and activate account.
+Once the profile is activated, user able to to log in to system.
+
+Last part is a public questionnaire.
+This servers as an application demo which allows unauthenticated researchers to fill prepared questionnaire.
+Since the public questionnaire is for demonstration purpose only, its data answers are not stored anywhere and will be forgotten once user leaves the screen.
 
 \image[0.5\textwidth]{fig:system-architecture}{System architecture}{analysis-system-architecture.pdf}
 
@@ -435,7 +459,7 @@ This section dedicated to production environment of this application.
 Since both parts of the system are independent, deployment of the whole app is done in two steps.
 In one step, the server side application is deployed.
 As discussed earlier, Haskell application does not need application server (the requests are handled directly by the application) but depends on persistence layer.
-To make the deployed application lose coupled, two Docker containers\footnote{What is docker} are used to decouple application itself from database.
+To make the deployed application lose coupled, two Docker containers\footnote{Docker is a development and deployment tool using containers to package up an application (together with its dependencies) and deploy it as a single package. Containers utilize hosts OS kernel instead of creting virtual machine and virtual OS \cite{ms-docker}.} are used to decouple application itself from database.
 To connect the containers, Docker compose is used to make private network between them.
 From the user perspective, the application behaves as monolith which internally encapsulates its complexity.
 
