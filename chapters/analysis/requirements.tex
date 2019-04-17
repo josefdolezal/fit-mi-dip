@@ -46,3 +46,28 @@ Questionnaire migration which was not finished by user may be canceled without a
 }
 
 \subsection{Non-functional requirements}\label{sec:non-functional-requirements}
+
+Now, I would like to discuss non-functional requirements of the system.
+These requirements specify entitlements for system and further define functional requirements.
+
+\requirement{NR1 -- User authentication}{%
+User is only allowed to create, modify, finish and cancel migration of questionnaires belonging to him.
+System administrator is allowed to migrate arbitrary questionnaire.
+}
+
+\requirement{NR2 -- Migrated question consistency}{%
+Question may be either unmarked, marked as resolved or marked for later review.
+Other states are ilegeal.
+}
+
+\requirement{NR3 -- Replies}{%
+If user's reply to question with new knowledge model (for example question type did not change), it must be preserved.
+}
+
+\requirement{NR4 -- State synchronization}{%
+Question state is synchronized automatically without user interaction.
+}
+
+\requirement{NR5 -- Migration interoperability}{%
+Questionnaire migrations are integrated into existing system and is compatible with its domain model.
+}
