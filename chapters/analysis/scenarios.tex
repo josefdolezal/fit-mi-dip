@@ -1,1 +1,135 @@
-\section{Scenarios}
+\section{Scenarios}\label{sec:scenarios}
+
+In previous sections, I described which requirements are relevant to questionnaire migrations.
+Requirements were validated against use cases.
+In this section, the reader will be further acquainted with use case execution demonstrated on scenarios.
+
+Scenarios are presented in a step-by-step form where each step represents interaction with system.
+
+\subsection{Scenarios actors}\label{sec:scenarios-actors}
+
+Before describing individual scenarios, I will briefly introduce actors participating in these scenarios.
+Scenarios has following actors:
+
+\begin{itemize}
+    \item \textbf{User}
+
+    An actor interacting with \textit{system} in a role of an arbitrary authenticated user.
+
+    \item \textbf{Application}
+    
+    An actor representing both client and server side of the system.
+    Acts as a blackbox from client perspective.
+    Its tasks may internally consist of communication between these two parts.
+
+\end{itemize}
+
+\subsection{Scenarios description}\label{sec:scenarios-description}
+
+This sections contains descriptions for individual scenarios.
+Roles described in previsous section will be highlighted using \textit{italic} font.
+
+All use cases starts in implicit state where user is authenticated and located on a screen with list of questionnaires.
+
+\requirement{Scenario for UC1 -- Create questionnaire migration}{%
+    \begin{enumerate}
+        \item The \textit{user} is notified about available migration.
+        \item The \textit{user} selects and upgrade option offered by \textit{application}.
+        \item The \textit{application} prompts user to select which of available versions of the knowlegdge model wants to migrate to.
+        \item The \textit{user} selects desired version.
+        \item The \textit{user} confirms selection.
+        \item The \textit{application} creates questionnaire migration and shows it to the \textit{user}
+    \end{enumerate}
+
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Output state:] The migration process is started and the \textit{user} sees preview of a first change.
+        \end{description}
+    \end{addmargin}
+}
+
+\requirement{Scenario for UC2 -- Cancel questionnaire migration}{%
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Input state:] The \textit{user} created an migration as described in UC1.
+        \end{description}
+    \end{addmargin}
+
+    \begin{enumerate}
+        \item The \textit{application} notifies user that there is a migration in progress on one of the \textit{user's} questionaire.
+        \item The \textit{user} selectes option "Cancel migration" displayed along with other questionnaire actions.
+        \item The \textit{application} will discard all data related to the questionnaire.
+        \item The \textit{user} is notified that there is an upgrade available for the questionnaire.
+    \end{enumerate}
+
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Output state:] The \textit{user} reverted questionnaire to the intial state.
+            The \textit{user} is at same state as at the beginning of the scenario for UC1.
+        \end{description}
+    \end{addmargin}
+}
+
+\requirement{Scenario for UC3 -- Display migration change context}{%
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Input state:] The \textit{user} created questionnaire migration according to scenario for UC1.
+        \end{description}
+    \end{addmargin}
+
+    \begin{enumerate}
+        \item The \textit{application} displays detail of a first change in the migration.
+        \item The \textit{user} expands hierarchical structure overview.
+        \item The \textit{application} displays detailed hierarchy structure and highlights currently displayed change.
+        \item The \textit{user} navigates through to the hierarchy to see the context of the change.
+    \end{enumerate}
+}
+
+\requirement{Scenario for UC4 -- Change migrated question state}{%
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Input state:] The \textit{user} created questionnaire migration according to scenario for UC1.
+        \end{description}
+    \end{addmargin}
+
+    \begin{enumerate}
+        \item The \textit{user} selects option "Continue" migration next to other questionnaire actions.
+        \item The \textit{applicaton} displays questionnaire migration process focused on the first change.
+        \item The \textit{user} navigates through list of changes until he sees first change of either question or its answer.
+        \item The \textit{application} offers to either resolve change or mark it for later review.
+            \begin{enumerate}[(a)]
+                \item The \textit{user} selects resolve change.
+                \item The \textit{user} selects review change later.
+            \end{enumerate}
+        \item The \textit{application} saves the state and notifies user about new state.
+    \end{enumerate}
+
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Output state:] The \textit{application} stored the updated state so the \textit{user} will see the new state next time he use the application.
+            Such state may be undone.
+        \end{description}
+    \end{addmargin}
+}
+
+\requirement{Scenario for UC5 -- Migrate questionnaire}{%
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Input state:] The \textit{user} updated the questionnaire migration state according to UC4 several times.
+        \end{description}
+    \end{addmargin}
+
+    \begin{enumerate}
+        \item The \textit{user} selects option "Continue" migration next to other questionnaire actions.
+        \item The \textit{applicaton} displays questionnaire migration process focused on the first change.
+        \item The \textit{user} selects "Apply migration" action.
+        \item The \textit{application} creates s new copy of the questionnaire on the new version of knowledge model.
+        \item The \textit{application} displays list of questionnaires with the original questionnaire on the old version of knowledge model and a new questionnaire on the version.
+    \end{enumerate}
+
+    \begin{addmargin}[2em]{0em}
+        \begin{description}
+            \item[Input state:] The \textit{user} has one more questionnaire in the list of questionnaires.
+        \end{description}
+    \end{addmargin}
+}
