@@ -53,6 +53,7 @@ These requirements specify entitlements for system and further define functional
 \requirement{NR1 -- User authentication}{%
 User is only allowed to create, modify, finish and cancel migration of questionnaires belonging to him.
 System administrator is allowed to migrate arbitrary questionnaire.
+Unauthicated users are not authorized to access migration feature at all.
 }
 
 \requirement{NR2 -- Migrated question consistency}{%
@@ -60,7 +61,7 @@ Question may be either unmarked, marked as resolved or marked for later review.
 Other states are ilegeal.
 }
 
-\requirement{NR3 -- Replies}{%
+\requirement{NR3 -- Preserve existing replies}{%
 If user's reply to question with new knowledge model (for example question type did not change), it must be preserved.
 }
 

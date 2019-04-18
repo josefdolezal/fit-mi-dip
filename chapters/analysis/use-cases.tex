@@ -1,1 +1,65 @@
-\section{Use-cases}
+\section{Use cases}\label{sec:use-cases}
+
+Based on identified requirements from previous section, I would like to further discuss application use cases covering these requirements.
+The use cases are initiated by authenticated users without need of increased permissions.
+All identified use cases together with short description are listed below.
+
+
+\requirement{UC1 -- Create questionnaire migration}{%
+Enables user to start questionnaire migration process in case he is notified about new knowledge model version availability.
+}
+
+\requirement{UC2 -- Cancel questionnaire migration}{%
+Enables user to discard process of the questionnaire migration without affecting state of the initial questionnaire or its replies.
+}
+
+\requirement{UC3 -- Display migration change context}{%
+Enables user to navigate through the new knowledge model version in context of filled in questionnaire replies.
+}
+
+\requirement{UC4 -- Change migrated question state}{%
+Enables user to modify changed question state to one of the following states:
+
+\begin{itemize}
+    \item Initial state -- changed question without state modification,
+    \item Needs review -- change needs to be review after migration is finished,
+    \item Resolved -- change does not affect user's previous answer.
+\end{itemize}
+}
+
+\requirement{UC5 -- Migrate questionnaire}{%
+Enables user to migrate questionnaire to the new version of the knowledge model.
+}
+
+\subsection{Requirements coverage}\label{sec:requirements-coverage}
+
+Requirements coverage ensures that all functional requirements identified in section \ref{sec:functional-requirements} are covered by defined use cases.
+Table \ref{table:uc-x-fr} shows how all identified requirements are covered by use cases.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|>{\columncolor{bananamania}}l | c | c | c | c | c | c | c | c | c |} 
+        \hline
+        \rowcolor{bananamania}
+        \makecell[t]{functional requirement\\\hline{}use case} & \rot{FR1} & \rot{FR2} & \rot{FR3} & \rot{FR4} & \rot{FR5} & \rot{FR6} & \rot{FR7} & \rot{FR8} & \rot{FR9} \\
+        \hline
+        UC1 & $\bullet$ & $\bullet$ & \, & \, & \, & \, & \, & \, & \, \\
+        \hline
+        UC2 & \, & \, & \, & \, & \, & \, & \, & \, & $\bullet$ \\
+        \hline
+        UC3 & \, & \, & $\bullet$ & $\bullet$ & \, & $\bullet$ & \, & \, & \, \\
+        \hline
+        UC4 & \, & \, & \, & \, & $\bullet$ & \, & $\bullet$ & \, & \, \\
+        \hline
+        UC5 & \, & \, & \, & \, & \, & \, & \, & $\bullet$ & \, \\
+        \hline
+   \end{tabular}
+   \caption{Coverage of functional requirements by use cases}
+   \label{table:uc-x-fr}
+\end{table}
+
+Figure \ref{fig:use-case-diagram} shows use cases diagram together with relationships between them.
+Since questionnaire migration feature is integrated into the system only for authenticated users, the diagram contains exactly one actor.
+The analysis of non-functional requirements shows that all authenticated users (regardless role) are allowed to manage migrations, therefore only one role is used.
+
+\image[0.8\textwidth]{fig:use-case-diagram}{Use cases relationship diagram}{use-case-diagram.pdf}

@@ -9,14 +9,21 @@
 \usepackage[acronym]{glossaries}
 \usepackage{todonotes}
 \usepackage{scrextend} % Paragraph margin
+\usepackage{booktabs} % Tables
+\usepackage{makecell} % Fancy cells
+\usepackage{color, colortbl} % Table colors
 
 % Colors
 \definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
 \definecolor{electriccrimson}{rgb}{1.0, 0.0, 0.25}
 \definecolor{bgcode}{rgb}{0.95,0.95,0.95}
+\definecolor{bananamania}{rgb}{0.98, 0.91, 0.71}
 
 % Remove header from glossary list
 \renewcommand {\glossarysection}[2][] {}
+
+% Rotate box by 90 degs
+\newcommand\rot{\rotatebox[origin=r]{90}}
 
 % Todos and rewordings
 \let\oldTodo\todo
