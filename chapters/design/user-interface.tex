@@ -1,0 +1,106 @@
+\section{User Interface}\label{sec:user-interface}
+
+User interface is a base building block for modern application.
+The better the user's experience from the application is, the more likely the application will be successfull\cite{dciw-ux-ui}.
+
+As a first step while designing the application, it is common to create wireframes.
+
+\subsection{Wireframes}\label{sec:wireframes}
+
+Wireframes are used to help understand the whole scope of the application while investing minimum amount of time and effort into actual design.
+More than that, wireframes help to verify that all use cases are covered with possibility to quickly correct or add missing scenarios or features.
+
+Before the actual design of the application is created, wireframes are often used to validate system or feature design by users.
+Such validation is called user testing and helps companies to effectlively adjust the behaviour and look of the application before it is fully designed or developed.
+
+Figures \ref{fig:wf1} up to figure \ref{fig:wf6} shows wireframes developed for the migration tool.
+
+\subsubsection*{Creating the migration}
+
+The migration will be started from list of existing questionnaires.
+If the questionnaire is based on the older of the knowledge model, there is an label notifying user about available migration (figure \ref{fig:wf1}).
+
+The upgrade option is visible with the rest of the actions only when the questionnaire is focused (howered by mouse pointer).
+By selecting the upgraded option, the modal window is presented (figure \ref{fig:wf2}) to the user asking to select to which version he wants to upgrade the questionnaire to.
+It is intentional not to preselect none of the available versions (a specially not the newest one) as user might want to upgrade to the newer version but not the latest one.
+
+\image[0.88\textwidth]{fig:wf1}{List of questionnaires with notification about available upgrade}{wf-1}
+
+\image[0.88\textwidth]{fig:wf2}{Modal dialog asking user to select newer version of the knowledge model}{wf-2}
+
+\subsubsection*{Migration overview}
+
+Once the user selected to which version he wants to migrate the questionnaire to, the migration process is started and its overview is displayed.
+On the screen, user sees three main panels (ignoring the base navigation panel on the left side -- figure \ref{fig:wf3}):
+
+\begin{itemize}
+    \item Structure overview,
+    \item Old questionnaire overview,
+    \item New questionnaire overview.
+\end{itemize}
+
+The structure panel is used to show the whole hierarchy of the questionnaire -- all possible questions and answers.
+By default, only chapters are visibile so user will not get confused by significant amount of nodes.
+
+The old questionnaire overview displays the questionnaire version from before the migration.
+This overview helps user to see difference between migrated versions.
+All textual changes are displayed using appropriate colours to make the difference highly visual.
+When a question node is selected, the user is able to see all possible answers with highlighted user's reply.
+If the question is of type \texttt{Items template}, only the number of user's replies is visible.
+
+The new questionnaire overview displays the questionnaire version from after the migration is finished.
+The view has same structure as panel with old questionnaire state with one significant difference: when user's reply is no longer applyable to the new version, user is notified.
+This might be important change for the user therefore is allowed to mark question for later review.
+
+Once the question is marked, user can no longer mark question until the current mark is not removed (figure \ref{fig:wf4}).
+
+To make it easier to explore all changes, application provides quick navigation between them using \textit{previous} and \textit{next} buttons (figure \ref{fig:wf3}).
+
+\image[0.88\textwidth]{fig:wf3}{Questionnaire migration detail (focused on question difference)}{wf-3}
+
+\image[0.88\textwidth]{fig:wf4}{Updated state of the migrated question with expanded context}{wf-4}
+
+\subsubsection*{Cancelling the migration}
+
+During the migration process, the user is not able to fill the migrated questionnaire.
+There might be special cases where user either wants to update replies or generaly cancel the migration.
+The can be done from the questionnaires list as shown in figure \ref{fig:wf5}
+
+\image[0.88\textwidth]{fig:wf5}{Questionnaire in the process of migration}{wf-5}
+
+\subsubsection*{Finishing the migration}
+
+Once the user reviews all the chagnes which will be applied to the questionnaire, he is able to finish migration.
+By finishing migration, new questionnaire on the new knowledge model version will be available along with original one.
+This allows user to compare replies after the migration is done.
+
+\image[0.88\textwidth]{fig:wf6}{Migrated questionnaire together with its unmigrated version}{wf-6}
+
+\subsubsection*{Use case coverage}
+
+Table \ref{table:wf-x-uc} shows which use cases are covered by which wireframe.
+This table makes certainity that all identified use cases were implemented into the final solution.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|>{\columncolor{bananamania}}l | c | c | c | c | c | c | c | c | c |} 
+        \hline
+        \rowcolor{bananamania}
+        \makecell[t]{use case\\\hline{}wirefame} & \rot{UC1} & \rot{UC2} & \rot{UC3} & \rot{UC4} & \rot{UC5} \\
+        \hline
+        WF1 & $\bullet$ & \, & \, & \, & \, \\
+        \hline
+        WF2 & $\bullet$ & \, & \, & \, & \, \\
+        \hline
+        WF3 & \, & \, & \, & $\bullet$ & $\bullet$ \\
+        \hline
+        WF4 & \, & \, & $\bullet$ & \, & $\bullet$ \\
+        \hline
+        WF5 & \, & $\bullet$ & \, & \, & \, \\
+        \hline
+        WF6 & \, & \, & \, & \, & $\bullet$ \\
+        \hline
+   \end{tabular}
+   \caption{Wifreframe covering of identified use cases}
+   \label{table:wf-x-uc}
+\end{table}
