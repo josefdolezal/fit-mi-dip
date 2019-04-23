@@ -1,0 +1,121 @@
+\section{Server Interface}\label{sec:server-interface}
+
+In this section, I will discuss what interface is needed to be provided by the server to enable all required features.
+The interface is described in form of \gls{rest} \gls{api} endpoints.
+All endpoints are further defined in individual sections.
+
+\subsection{Create questionnaire migration}
+
+This endpoint is used to create new questionnaire migration.
+The migration is created for questionnaire, whose identifier is passed as \gls{url} parameter.
+
+The other parameter, \texttt{targetPackageId} is passed in request body and represents identifier of newever version of the knowledge model.
+
+\begin{itemize}
+    \item \textbf{URL}
+        \begin{itemize}
+            \item \route{/questionnaires/:qtnUuid/migrations}
+        \end{itemize}
+
+    \item \textbf{Method}
+        \begin{itemize}
+            \item \texttt{POST}
+        \end{itemize}
+
+    \item \textbf{URL Parameters}
+        \begin{itemize}
+            \item \texttt{qtnUuid} -- Migrated questionnaire unique identifier
+        \end{itemize}
+\end{itemize}
+
+\subsection{Get existing migration detail}
+
+Endpoint used to retrieve information about existing migration.
+The migration is searched for by migrated questionnaire identifier, which is passed in as a \texttt{URL} parameter.
+
+Returns an error code if there is no migration for given questionnaire.
+
+\begin{itemize}
+    \item \textbf{URL}
+        \begin{itemize}
+            \item \route{/questionnaires/:qtnUuid/migrations}
+        \end{itemize}
+
+    \item \textbf{Method}
+        \begin{itemize}
+            \item \texttt{GET}
+        \end{itemize}
+
+    \item \textbf{URL Parameters}
+        \begin{itemize}
+            \item \texttt{qtnUuid} -- Migrated questionnaire unique identifier
+        \end{itemize}
+\end{itemize}
+
+\subsection{Delete existing migration}
+
+Cancels an existing migration by migrated questionnaire identifier passed in as a \texttt{URL} parameter.
+
+\begin{itemize}
+    \item \textbf{URL}
+        \begin{itemize}
+            \item \route{/questionnaires/:qtnUuid/migrations}
+        \end{itemize}
+
+    \item \textbf{Method}
+        \begin{itemize}
+            \item \texttt{DELETE}
+        \end{itemize}
+
+    \item \textbf{URL Parameters}
+        \begin{itemize}
+            \item \texttt{qtnUuid} -- Migrated questionnaire unique identifier
+        \end{itemize}
+\end{itemize}
+
+\subsection{Update migrated question state}
+
+Allows to update migrated question state by setting into \texttt{NeedsReview} or \texttt{Resolved} state.
+The questionnaire is identified by an identifier passed in as a \texttt{URL} parameter.
+
+New state is passed in as structure composed from question identifier and collection of question flags.
+When no flag is provided, question is set to the default state.
+
+\begin{itemize}
+    \item \textbf{URL}
+        \begin{itemize}
+            \item \route{/questionnaires/:qtnUuid/migrations/resolveQuestionEvent}
+        \end{itemize}
+
+    \item \textbf{Method}
+        \begin{itemize}
+            \item \texttt{PUT}
+        \end{itemize}
+
+    \item \textbf{URL Parameters}
+        \begin{itemize}
+            \item \texttt{qtnUuid} -- Migrated questionnaire unique identifier
+        \end{itemize}
+\end{itemize}
+
+\subsection{Finalize migration}
+
+This enpoint enables user to finalize existing migration and actually migrate the questionnaire from an older version of the knowledge model to a newer one.
+By calling this endpoint, new copy of the questionnaire (with new identifier) is created and saved along with the original version.
+
+\begin{itemize}
+    \item \textbf{URL}
+        \begin{itemize}
+            \item \route{/questionnaires/:qtnUuid/migrations}
+        \end{itemize}
+
+    \item \textbf{Method}
+        \begin{itemize}
+            \item \texttt{PUT}
+        \end{itemize}
+
+    \item \textbf{URL Parameters}
+        \begin{itemize}
+            \item \texttt{qtnUuid} -- Migrated questionnaire unique identifier
+        \end{itemize}
+\end{itemize}
