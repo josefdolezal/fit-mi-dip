@@ -1,0 +1,48 @@
+\section{Used technologies}\label{sec:used-technologies}
+
+Now, I would like to introduce the reader to the technologies used to build the migration tool.
+As was already stated in the non-functional requirements in section \ref{sec:used-technologies}, the tool needs to be fully compatible and interoperable with the current application.
+
+\subsection{Server application}
+
+I described the tools currently used in the \gls{dsw} in the analysis in chapter \ref{cptr:analysis}.
+Here, I will briefly highlight the main parts.
+
+\subsubsection*{Haskell programming language}
+
+The server part of the application is fully implemented in Haskell programming language.
+Haskell is a purely functional programming language, which means that all functions are \textit{pure}\cite{haskell-web}.
+By pure functions, we understand every function which is free of side effects.
+Thanks to side effects elemination, functions becomes simpler and easier to reason about -- each function will for the same input return the same output every time.
+
+Because the whole server application was already built in Haskell, there was not much space for choosing programming language.
+
+The migration tool could be built as an individual service (often called microservice \cite{micros-web}) in an arbitrary programming language.
+This would, however, introduce unnecessary complexity in development itself, but also in deployment and and application management.
+
+Because building microservice would mean to rebuild vast majority of existing application (significant part of the model layer and the \gls{api} layer), I decided to implement the migrator as a new module which is part of the existing code base.
+
+\subsubsection*{Integrated Development Environment}
+
+\gls{ide} is an software application integrating numerous tools helping faster development\cite{ssq-ide}.
+Such application helps with code syntax highglighting, compiling, testing or even deploying developed application.
+
+To name a few, applications like Atom, Visual Studio Code or IntelliJ IDEA support development using Haskell\footnote{Haskell is usually not supported out of the box by \gls{ide}s. Instead, plugin with language support and advanced features needs to be installed. Those plugins are usually based on either \texttt{ghc-mod} or \texttt{Intero} libraries.}.
+
+For project as extensive as \gls{dsw} is, neither of those applications was working correctly.
+All of the mentioned suffered by bad performance, invalid symbols recognition and invalid error reporting.
+
+After consultation with team members of the \gls{dsw} maintainers, I decided to turn off all advanced language support and used only syntax highlighting in IntelliJ IDEA.
+Such disadvantage has unfortunately significant impact on the development time and orientation in the project.
+
+\subsubsection*{Scotty web framework}
+
+The communication between server and client application is done using \gls{rest} \gls{api}.
+The \gls{api} interface id built on top of the \textit{Scotty web framework}.
+
+Scotty is an framework written in Haskell which allows to create type-safe \gls{api} routing and provides convenience helper functions to parse \gls{http} requests.
+
+Most of the work with integrating Scotty with \gls{dsw} was already done when I joined the project.
+My only interaction with the framework was to register all supported routes for the migration tool and convert data between internal representation and public \gls{json}.
+
+\subsection{Client application}
