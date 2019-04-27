@@ -46,3 +46,91 @@ Most of the work with integrating Scotty with \gls{dsw} was already done when I 
 My only interaction with the framework was to register all supported routes for the migration tool and convert data between internal representation and public \gls{json}.
 
 \subsection{Client application}
+
+Similary to the server tooling, used technologies were already decided by the \gls{dsw} maintainers in the beginning of the project.
+In the application analysis in chapter \ref{cptr:analysis}, I described in depth the client side application architecture and its base modules.
+In this section, I would like to briefly summarize tools and used technologies.
+
+\subsubsection*{Elm programming language}
+
+The whole client application is currently written in Elm programming language (described in \ref{sec:frontend-application}).
+Elm is an functional language with similar syntax to Haskell.
+Its base in building frontend application lays in unidirectional architecture called \texttt{Elm architecture}.
+
+The term unidirectional describes how data are passed through the application.
+In Elm, the data are always passed one way, through its base architectural pattern represented by \texttt{model}, \texttt{update} and \texttt{view}.
+The application state is represented by \texttt{model}, changed using \texttt{update} function and then represented in \texttt{view}.
+
+The great advantage of using Elm is that its functional approach may be shared and discussed with server-side team bacause of syntax similarity.
+
+Even though both languages are functional, there are few differencies\cite{mmh-elm-func-fe} I would like to point out two biggest.
+
+First one is lack of \textit{typeclasses} in Elm.
+Such disadvantage makes it harder to create generic constraints which are widely used in Haskell.
+This makes Elm \texttt{core} library more verbose as functions such as \texttt{map} must be implemented for each type individually.
+
+On the other hand, Elm's record syntax is much more powerfull then Haskell's.
+In Elm, all records may be automatically used as free functions (taking object as argument and return record value) out of the box.
+Records, thus, may be used in function composition in combination with functions like \texttt{Maybe.map}.
+This makes the code easily readable and manitainable.
+
+Haskell offers similar feature by using \texttt{lenses} language extension, it however requires records to be structured in a specific way which makes harder to read.
+
+\subsubsection*{Integrated Development Environment}
+
+After the struggle I had with choosing the right Haskell \gls{ide}, I decided to keep Elm environment as simple as possible.
+I choose Visual Studio Code (or \textit{VS Code}, for short) for development as it is lightweight and based on my own experience it is faster and more responsible.
+
+I used VS Code together with \textit{elm}\cite{gh-elm-pg} plugin which enables features like syntax highlighting, error reporting, type definitions and "jump to definition".
+This made my onboarding on the project much faster and development more convenient than doing the same things on the server side.
+
+\subsubsection*{Node environment and Webpack}
+
+Because Elm runs in an internet browser, it needs some kind of a web server to handle requests and serve the application to the user.
+In production, open-source servers like NGINX\footnote{NGINX homepage: \url{https://www.nginx.com}.} or Apache\footnote{Apache HTTP server homepage: \url{https://httpd.apache.org}.} are often used\cite{nc-webservers}.
+
+For development purpose, Elm offers simple \gls{http} server called \textit{rector}.
+With reactor, developer is able run arbitrary Elm source code in a browser.
+
+Reactor is however shipped with its own \gls{html} template which means that all code used in application \gls{html} will not be loaded.
+This includes stylesheets, custom JavaScript scripts or \textit{ports} (Elm-to-Javascript interoperability \gls{api}).
+
+Together with Elm code, application sources also contains \glsentryshort{sass} which are compiled into standard \glsentryshort{css}.
+Therefore, building the application is a multistep process -- such process, however, can not be handled by reactor.
+
+There are many solutions to this problem, the maintaning team of \gls{dsw} choose the \texttt{Node.js}\footnote{Node.js$^\textrm{\textregistered}$ is a JavaScript runtime built on Chrome's V8 JavaScript engine.} environment together with \texttt{Webpack} tool.
+
+Webpack is used to compile all application sources with appropriate compiler and creates application bundle from output.
+Webpack is also shipped with development server (as a separate tool) which is able to watch application sources and run compiler whenever the source changes.
+In addition to that, It is also capable of refreshing browser window so the changes are visible immediately.
+
+The production build is also done using Webpack which will also set production configuration to all bundled sources.
+
+\subsubsection*{Text Difference}
+
+The functional requirements from section \ref{sec:functional-requirements} says that the application should show the exact text difference for all migrated questionnaire nodes.
+Because there is no information about the migration differences stored on the server, this feature is fully implemented on client side.
+
+Problem of finding the difference between two given texts is called \textit{string metric} (also known as \textit{similarity metric} or \textit{string distance})\cite{wiki-string-metric}.
+There are multiple algorithms solving string distance problem.
+To name a few, there is the Myers' algorithm\cite{art-myer} and Wu's algorithm\cite{art-wu} which are based on the same idea.
+Wu's algorithm, however, achievs up to four times better performance for strings, which shares most of the strings' characters.
+
+In migrations, I assume the string differences will be in most cases rewordings or typo corrections.
+Therefore the Wu's algorithm is a great fit for this problem.
+
+This algorithm is implemented in \texttt{elm-diff}\cite{epkg-elm-diff} open-source library.
+For any given collection of elements, it will return new collection with difference information for each element.
+Such elements may be in following states:
+
+\begin{itemize}
+    \item NoChange,
+    \item Added,
+    \item Removed.
+\end{itemize}
+
+With a slight modification, it can be used to recieve strings (which are not collections in Elm) directly.
+The output can be then used to render string character-by-character and highlighting it with appropriate color.
+The usage of string difference (built on top of the \texttt{elm-diff}) is shown in \ref{code:elm-diff}.
+
+\elmcode{code:elm-diff}{String difference using \texttt{elm-diff}}{elm-diff.elm}

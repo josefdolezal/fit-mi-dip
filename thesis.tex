@@ -54,6 +54,14 @@
 \end{listing}
 }
 
+% Code examples
+\newcommand{\elmcode}[3]{
+\begin{listing}[htbp]
+	\caption{\label{#1}#2}
+	\inputminted[linenos, bgcolor=bgcode]{elm}{assets/code-examples/#3}
+\end{listing}
+}
+
 % Functional and non-functional requirements
 \newcommand{\requirement}[2]{%
 \begin{addmargin}[2em]{0em}
