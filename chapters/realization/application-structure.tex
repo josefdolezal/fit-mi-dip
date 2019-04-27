@@ -1,0 +1,61 @@
+\section{Application structure}\label{sec:application-structure}
+
+After a summary of the used tools, I would like to acquaint the reader with structure of both server and client applications.
+The structure for each of the applications corresponds to sections listed in analysis in chapter \ref{cptr:analysis}.
+For more detailed description of modules, please reffer to appropriate section in the chapter mentioned above.
+
+\subsection{Server application structure}
+
+Firstly, I would like to introduce structure of the server application.
+The structure reflects structure beginning in the project root.
+Some directories in the project contains significant amount of subdirectories, which are not important in context of this thesis.
+These directories are omitted and replaced by an ellipsis (\dots) sign.
+The structure is shown in figure \ref{fig:server-structure}.
+
+\begin{figure}[H]
+    \dirtree{%
+        .1 dsw-server.
+		.2 app\DTcomment{command line interface sources}.
+		.2 config\DTcomment{application configuration files}.
+        .2 lib\DTcomment{the application sources directory}.
+        .3 API\DTcomment{REST API related modules}.
+        .4 Handler\DTcomment{requests handlers}.
+        .4 Resource\DTcomment{JSON mapping and DTOs}.
+        .3 Database\DTcomment{BSON mapping and DAOs}.
+        .3 Model\DTcomment{internal model objects}.
+        .3 Service\DTcomment{application services}.
+        .3 \dots\quad\DTcomment{modules unrelated to this thesis}.
+		.2 scripts\DTcomment{build scripts}.
+		.2 templates\DTcomment{management plans and emails templates}.
+		.2 test\DTcomment{applications tests}.
+		.2 vendor\DTcomment{custom thirdparty libraries}.
+    }
+    \caption{Structure of the server application}\label{fig:server-structure}
+\end{figure}
+
+\subsection{Client application structure}
+
+In this section, I will introduce the client application structure.
+Similary to the server application structure, individual modules are desribed in detail in chapter \ref{cptr:analysis}.
+The structure in figure \ref{fig:client-structure} lists main application modules.
+Modules, which are not related to this thesis are left out and grouped using an ellipsis (\dots) sign.
+
+The client application project folder contains other sources then Elm source files.
+Theses are not relevant to this and therefore the structure only shows sources located in \texttt{src/elm} directory.
+
+\begin{figure}[H]
+    \dirtree{%
+        .1 /src/elm.
+        .2 KMEditor\DTcomment{the file with CD contents description}.
+        .2 KnowledgeModels\DTcomment{the file with CD contents description}.
+        .2 Questionnaires\DTcomment{the file with CD contents description}.
+        .3 Create\DTcomment{the file with CD contents description}.
+        .3 Edit\DTcomment{the file with CD contents description}.
+        .3 Migration\DTcomment{the file with CD contents description}.
+        .4 DiffOverview\DTcomment{the file with CD contents description}.
+        .4 DiffTree\DTcomment{the file with CD contents description}.
+        .3 \dots\quad\DTcomment{modules unrelated to this thesis}.
+        .2 \dots\quad\DTcomment{modules unrelated to this thesis}.
+    }
+    \caption{Structure of the client application}\label{fig:client-structure}
+\end{figure}
