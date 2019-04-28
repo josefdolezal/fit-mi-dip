@@ -1,0 +1,111 @@
+\section{Implementation}\label{sec:implementation}
+
+In this section, I describe in detail how features designed in chapter \ref{cptr:design} are actually implemented.
+Sections are appropriately divided into parts according to the application where it was implemented.
+
+\subsection{Initialize questionnaire migration}
+
+The initialization part of the migration process is handled on both client and server side.
+In the following sections, I will describe each part individually.
+
+\subsubsection*{Server-side implementation}
+
+On the server side, the initialization is an one step process.
+The server expose and \gls{rest} \gls{api} route accessible on \route{POST /questionnaires/:qtnUuid/migrations} (described in \ref{sec:server-interface}).
+
+The route is registered in shared application router using its \gls{url}, \gls{http} method and handling function.
+The registration is shown in code example \ref{code:route-registration}.
+
+\hscode{code:route-registration}{Registration of the \gls{rest} route}{route-registration.hs}
+
+The initialization itself is simple, as it only requires to validate input data and store the migration state.
+The state is a uncomplicated data structure which is composed from the migrated questionnaire (still based on the older version of the knowledge model) and identifier of the knowledge model.
+
+Once the request pass validations, its data are passed are passed to \texttt{QuestionnaireMigrationService} module.
+This module is resposinble for migration consistency -- it always transitions from one consisten state to another.
+
+After the questionnaire is created, the stored data are enriched by compiled knowledge models and difference events and returned to the client.
+
+By creating separate structure for keeping migration state, it is secured that the original version will never be modified during migration.
+This approach is more complex than doing the state modification in-place (by modifying the original questionnaire directly), but significantly helps to keep system consistency.
+
+\subsubsection*{Client-side implementation}
+
+On the client side, this process requires two steps.
+In the first step, the application needs to fetch informations about available knowledge models which user can migrate to.
+This action is similar to upgrading knwoledge models itself and the whole code for such functionality was reused from existing code base (programmed by Ing. Jan Slifka\cite{mt-slifka}).
+
+Once the data are fetched, the application will filter out invalid data (older versions of the knowledge model) and displays modal window with available options (shown in wireframe \ref{fig:wf1}).
+Once the user selects version for migration the application sends data to the server.
+After server responds, the application will load the migration detail and display it to the user.
+
+The code used for transition between application states is shown in example \ref{code:create-migration}.
+
+\elmcode{code:create-migration}{Transitioning between states during migration initialization}{create-migration.elm}
+
+\subsection{Cancel questionnaire migration}
+
+Now I would like acquaint the reader with implementatiton of the migration cancelling feature.
+
+\subsubsection*{Server-side implementation}
+
+On the server side, the cancellation is done by deleting existing questionnaire state.
+By deleting initialized state, the original questionnaire will appear in exactly the same state as it was before the migration was initialized.
+
+The endpoint is available at \route{DELETE /questionnaires/:qtnUuid/migrations} route.
+
+Once the user sends request to the server, the it is validated by handler layer.
+After validation, the data are processed using service which takes care of converting request data into internal representation.
+The deletion itself is done using \texttt{DAO} as shown in example \ref{code:delete-dao}.
+
+\hscode{code:delete-dao}{DAO module handling migration state deletion}{delete-dao.hs}
+
+The result of the database action is converted into \gls{http} status code and returned to the client application with empty body.
+
+\subsubsection*{Client-side implementation}
+
+The client application offers user to cancel migration only in case, where the server sent questionnaire data with appropriate flag (as shown in wireframe \ref{fig:wf5}).
+When the user choose to cancel the migration, the application sends request to the server.
+Once the server reposponds to the request, list of questionnaires is reloaded to correspond with latest state available at server.
+
+\subsection{Create migration context}
+
+\subsubsection*{Server-side implementation}
+
+\subsubsection*{Client-side implementation}
+
+\subsection{Update migrated questionnaire state}
+
+\subsubsection*{Server-side implementation}
+
+\subsubsection*{Client-side implementation}
+
+\subsection{Finalize migration}
+
+Finilizing the migration is the last step to upgrade the questionnaire knowledge model version.
+
+\subsubsection*{Server-side implementation}
+
+Once the client requests to finalize the migration, server needs to do following tasks:
+
+\begin{enumerate}
+    \item create new questionnaire with migrated answers,
+    \item delete the migration state.
+\end{enumerate}
+
+The first step ensures, that new questionnaire is created alongside the original one.
+Together with questionnaire, replies and question flags are copied.
+
+The second step reverts the original questionnaire into original state (can be migrated again).
+Once the migration is finished, user's list of questionnaire will contain the new questionnaire alongside the orginal.
+
+The \gls{api} endpoint is available at \route{PUT /questionnaires/:qtnUuid/migrations} and returns empty body with appropriate \gls{http} status code.
+
+\subsubsection*{Client-side implementation}
+
+The client application use similar approach as with initializing or finalizing the migration.
+The user initiates system action (\texttt{Message}, in Elm terminology) which is followed by creating an \gls{api} request to the server.
+
+The action s initiated from migration detail.
+Once the server responds, the application redirects user to the list of questionnaires.
+After the redirect, application will fetch the latest version of the questionnaires and user will the newer version display alongside the original one.
