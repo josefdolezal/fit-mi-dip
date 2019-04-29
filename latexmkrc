@@ -1,5 +1,5 @@
 $pdflatex = 'pdflatex -interaction=nonstopmode -halt-on-error -shell-escape';
-@default_files = ('thesis.tex');
+@default_files = ('thesis.tex', 'cover.tex');
 
 add_cus_dep('glo', 'gls', 0, 'run_makeglossaries');
 add_cus_dep('acn', 'acr', 0, 'run_makeglossaries');
