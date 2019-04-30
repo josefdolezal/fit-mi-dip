@@ -68,7 +68,7 @@ The client application offers user to cancel migration only in case, where the s
 When the user choose to cancel the migration, the application sends request to the server.
 Once the server reposponds to the request, list of questionnaires is reloaded to correspond with latest state available at server.
 
-\subsection{Create migration context}
+\subsection{Create migration context}\label{sec:create-migration-context}
 
 The migration context is a feature, where user is able to see changes occured in between current and target version of the knowledge model.
 The context is made from knowledge model events, which are visualized in context of the filled questionnaire.
@@ -118,6 +118,8 @@ Because the \texttt{DiffState} is used to show both original and new state, the 
 While transforming events, there is no information about the hierarchical classification of the node.
 Therefore this structure can not be directly mapped to the tree structure and can not take in to account user's replies.
 The example of transforming events into \texttt{DiffState}s is shown in example \ref{code:transform-events}.
+
+\todo{Describe precedence of events (added over modified, deleted over modified)}
 
 \elmcode{code:transform-events}{Transforming knowledge model events into diff state}{transform-events.elm}
 
