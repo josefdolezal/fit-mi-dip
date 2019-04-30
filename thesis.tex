@@ -38,6 +38,14 @@
 	\end{figure}
 }
 
+% Shortcut for images with altered caption
+\newcommand{\altimage}[5][\textwidth]{
+	\begin{figure}\centering
+		\includegraphics[width=#1]{assets/#5}
+		\caption[#4]{#3}\label{#2}
+	\end{figure}
+}
+
 % Code examples
 \newcommand{\hscode}[3]{
 \begin{listing}[htbp]
