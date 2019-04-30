@@ -70,15 +70,90 @@ Once the server reposponds to the request, list of questionnaires is reloaded to
 
 \subsection{Create migration context}
 
+The migration context is a feature, where user is able to see changes occured in between current and target version of the knowledge model.
+The context is made from knowledge model events, which are visualized in context of the filled questionnaire.
+Therefore, the migration context is only done on the client side of the application -- the only purpose of server for this action is to provide the current migration state.
+
 \subsubsection*{Server-side implementation}
 
+For the migration state, the server needs to create \textit{diff knowledge model}
+Diff knowledge model contains nodes from the newer version together with nodes which were only available in previous version and were deleted during customization.
+
+Such knowledge model is created using specialized module called \texttt{KnowledgeModelDiffService}.
+This service module expose functionality to create diff knowledge model by giving original and target knowledge models identifiers.
+
+The service will compile original knowledge model and finds all events occured up until the target version.
+After that, specialized version of knowledge model compiler is called to create the diff knowledge model.
+The custom compiler main task is to remove all destructing events and running the standard compiler as shown in example \ref{code:custom-compiler}.
+
+Once the knowledge is compiled, it enriches the response to the client application.
+
+\hscode{code:custom-compiler}{Diff knowledge model compiler}{custom-compiler.hs}
+
 \subsubsection*{Client-side implementation}
+
+On the client side, the making the context is more complex.
+There are three structures which needs to be created and maintained, it is:
+
+\begin{itemize}
+    \item \texttt{DiffTree},
+    \item \texttt{DiffStates},
+    \item \texttt{DiffEventsUuids}.
+\end{itemize}
+
+As mentioned in section \ref{sec:questionnaire-overview}, the first two structures are incompatible and therefore the third structure is used to map between them.
+
+The \texttt{DiffTree} is used to create overview of the whole questionnaire structure (with all possible questions and answers) by also taking the user's answers into account.
+
+Structure is built on top of the customly created knowledge model, called diff knowledge model.
+
+Once the client application downloads the migration state, it starts building the mentioned structures.
+The first one created is \texttt{DiffTree}.
+The tree is created by recursively browsing knowledge model nodes as shown in example \ref{code:diff-tree}.
+
+\elmcode{code:diff-tree}{Recursive initialization of the questionnaire tree (simplified)}{diff-tree.elm}
+
+Once the tree is created, the diff events are transformed into internal representation to build the \texttt{DiffStates} structure.
+Because the \texttt{DiffState} is used to show both original and new state, the transfromation needs not only the event as an input, but also both versions of the knowledge model.
+While transforming events, there is no information about the hierarchical classification of the node.
+Therefore this structure can not be directly mapped to the tree structure and can not take in to account user's replies.
+The example of transforming events into \texttt{DiffState}s is shown in example \ref{code:transform-events}.
+
+\elmcode{code:transform-events}{Transforming knowledge model events into diff state}{transform-events.elm}
+
+The last structure used to create questionnaire overview is \texttt{DiffEventsUuids}.
+This structure is build after the previous one because its content is used to quickly search diff state nodes for the overview tree and vice versa.
+It is created by visiting every node in \texttt{DiffTree} and looking up its unique identifier in \texttt{DiffState}, when the node is found in of both these structures, it is inserted into collection.
+This way, there will be multiple records for item templates question type if user replied multiple time.
+Such behavior is intentional and correct by design.
+The illustration \ref{fig:mapping-structure} shows how the mentioned data structures are connected.
+
+\image[0.8\textwidth]{fig:mapping-structure}{Mapping between tree structure and diff events}{mapping-structure.pdf}
 
 \subsection{Update migrated questionnaire state}
 
+Updating questionnaire state allows user to add flags to questions which are listed in list of diff events.
+
 \subsubsection*{Server-side implementation}
 
+On the server side, the only responsibility is to persist given flags.
+As there might be more flags in the future with different entitlements for consistency, the server does not run any validations on flags provided from the client application.
+Currently, the whole consistency is managed on the client application only.
+
+Once the provided data from the client are successfully deserialized, it replaces the current flags for given question and are stored in questionnaire in migration state.
+
 \subsubsection*{Client-side implementation}
+
+The client application allows to modify question state only when the question is listed in list of events and has default state (no flags).
+To do so, the application only shows the \textit{resolved} and \textit{needs review} buttons when the question state was not modified previously.
+In other case, the application renders an \textit{undo} button instead to allow user to return question to the default state.
+
+The state is synchronized immediately when user presses appropriate button.
+Once the state change is synchronized with the server, it is also updated locally (without fetching data from server).
+The local update forces application to rerender the whole screen (in the sense of virtual \gls{dom}) which leads to switching action buttons for undo action and vice versa.
+
+The application also allows the user to add flags to system answers (for item templates or single choice answers).
+This, however, internally flags question instead of answer bacause the quetionnaire \gls{ui} does not support previews of answers only.
 
 \subsection{Finalize migration}
 
