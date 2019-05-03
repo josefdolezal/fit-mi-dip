@@ -1,16 +1,16 @@
 \chapter{Introduction}\label{cptr:introduction}
 
 From the beginning of the ages, science has served to expand the collective consciousness of our society.
-It was, however, a privilege of experts in industry and their research results were not accessible to the general public.
+It was, however, a privilege of experts in the industry and their research results were not accessible to the general public.
 With the rise of technologies of the twenty-first century, science is undergoing significant changes.
 
-Science is no longer meant to serve a narrow group of scientists.
+Science is no longer meant to serve a small group of scientists.
 Instead, we all use it in different forms in our daily lives.
 Today, strategic decisions in the commercial business are almost exclusively based on data analysis.
 Public participation in the processing of researched data is therefore almost unavoidable.
 
 Making science accessible is however necessary not only for the general public.
-It also serves to the future researchers who would like to start their research on the existing data.
+It also serves the future researchers who would like to start their research on the existing data.
 The Open Science Movement is focusing on making science researches accessible and reproducible.
 
 In 2019, near to 1.4 billion euro will be funded into science and research from taxpayers' money in the Czech Republic itself\cite{rvvi-budget}.
@@ -21,28 +21,31 @@ The format of publications using scientific articles, used during the whole twen
 Such format of results is often not machine-processable or open (charged using paywalls), data are not understandable, and research conclusions are not reproducible.
 
 The goal of the Open Science Movement is to change such an approach to science.
-As Open Science, we can understand an umbrella term for a systematic change in how researchers work, collaborate, share ideas and makes their researches more accessible and reusable.
+By Open Science, we can understand an umbrella term for a systematic change in how researchers work, collaborate, share ideas and makes their researches more accessible and reusable.
 The guiding principle for Open Science, therefore, is making research data and its related tools fulfill the \glsentryshort{fair} principles.
 
 According to these principles, all research data should meet four basic requirements: \gls{fair}.
-Data should be findable for both humans and machines, accessible using open and universal protocols, interoperable with use of formal language and vocabulary, and reusable with clear and accessible license and with relevant attributes.
+Data should be findable for both humans and machines, accessible using open and universal protocols, interoperable with the use of formal language and vocabulary, and reusable with clear and accessible license and with relevant attributes.
 
 As \gls{fair} only covers theoretical principles, there is no strict implementation.
 One of the existing implementations is \gls{dsw}.
-This system is developed by ELIXIR\footnote{ELIXIR is multinational group of scientists associating scientific resources such as databases, software tools, and educational materials across Europe.} (specifically by ELIXIR CZ and EXILIR NL nodes).
+This system is developed in cooperation with ELIXIR\footnote{ELIXIR is a multinational group of scientists associating scientific resources such as databases, software tools, and educational materials across Europe.} (specifically by ELIXIR CZ and EXILIR NL nodes) organization.
 
 \section*{Goals of the thesis}
 
-This thesis extends the thesis of Ing. Vojtěch Knaisl which dealt with the topic of developing migration tool for \gls{km} in \gls{dsw} system.
+This thesis extends the thesis of Ing. Vojtěch Knaisl which dealt with the topic of developing a migration tool for \gls{km} in \gls{dsw} system.
 
-The main goal is to create migration tool for \gls{km} in \gls{dsw}.
-This tool will help researchers migrate existing plans based on older version of knowledge model (or its localization) to new version including new information and changes.
+The main goal is to create a migration tool for \gls{dmp} in \gls{dsw}.
+This tool will help researchers migrate existing plans based on an older version of knowledge model (or its customization) to a new version which includes updated information and changes.
 
 \medskip
 
-The first chapter briefly sums up the current state of the system and deals with an analysis of the possible solution.
-The analysis describes possible tools (programming languages, frameworks, \dots) and solutions.
+The first chapter sums up the current state of the system and introduces the reader to the system architecture.
 
-In the following chapter, Design, I am describing the design of the proposed solution.
-Then, I describe the implementation part of the solution and its integration into the existing system, in chapter Solution.
-The last chapter, Testing, describes which techniques and tools I used to verify whether the tool is working correctly.
+After that, in the second chapter, I will define formal system requirements together with use cases and user scenarios.
+
+In the following chapter, Design, I will describe the conceptual design of the proposed solution together wireframes of the application user interface.
+
+Then, in chapter Realization, I describe the implementation part of the conceptual design and its integration into the existing system.
+
+The last chapter, Testing, describes which technique I used to verify whether the tool is working correctly, as designed.
