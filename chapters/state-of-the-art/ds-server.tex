@@ -1,11 +1,12 @@
 \subsection{DSW-Server}\label{sec:dsw-server}
 
 The backend part of the application is written using the Haskell programming language.
-The primary goal of this portal is to create data management plans. \reword{Most of the sentences starts with the word "the", reword it so it does not feel as machine generated.}
-At least one knowledge model must be added to the system before data plans can be generated.
-At the time of writing, \gls{dsw} is shipped with a prebuild knowledge model called \textit{core}.
+The primary goal of this portal is to help researchers create data management plans for their experiments.
+To be able to create a management plan, at least one knowledge model must be created.
+At the time of writing, the \gls{dsw} is shipped without any prebuild knowledge model by default.
+The maintaing team, however, provides the \textit{core} knowledge model separately to help data stewards setup initial data faster\cite{gh-km-core}.
 
-Knowledge models are represented using \gls{json} and stored in a file on the server file system.
+Public knowledge models (such as \textit{core}) are represented using \gls{json} and stored in a file on a public server.
 Data stewards then use these models to create questionaries.
 The role of researchers is to fill in the questionaries with meta information about their research.
 
@@ -16,11 +17,11 @@ We, however, have silent assumptions in the flow described above.
 The portal also has to support the following features in addition to the mentioned business logic:
 
 \begin{itemize}
-    \item User management (roles, authorization and authentication),
-    \item Package administration (cration, editing and versioning),
-    \item Data persistency (database connection, file system integration)
+    \item User management (roles, authorization, and authentication),
+    \item Knowledge model (and its customizations) administration including creation, editing, and versioning,
+    \item Data persistence (database connection, file system integration),
     \item \glsentryshort{rest} \glsentryshort{api}.
 \end{itemize}
 
 All of the mentioned functions are split into independent Haskell modules.
-The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in Haskell, inspired by Ruby's Sinatra. It is a lightweight alternative to frameworks like Yesod or Spock. The source code is available on GitHub: https://github.com/scotty-web/scotty.}.
+The \glsentryshort{rest} \glsentryshort{api} layer is built using Scotty framework\footnote{Scotty is an open-source web framework written in Haskell, inspired by Ruby’s Sinatra. It is a lightweight alternative to frameworks like Yesod or Spock. The source code and more information is available on the project homepage: https://github.com/scotty-web/scotty.}.

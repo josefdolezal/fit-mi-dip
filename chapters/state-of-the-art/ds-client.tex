@@ -3,24 +3,25 @@
 DSW-Client is a frontend application written in Elm programming language\footnote{Elm is a type-safe programming language used for web applications frontend. The source code written in Elm is transpiled into JavaScript and interpreted using a web browser. Elm website: https://elm-lang.org.}.
 It provides a web-based user interface for the server application.
 
-The implementation was done by Ing. Jan Slifka as a part of his master's thesis in 2018.
-\todo{Validate the date of frontend application}
+The implementation was done by Ing. Jan Slifka as a part of his master's thesis in 2018\cite{mt-slifka}.
 
 The application is built using Elm Architecture.
-The logic of such application is split into three separated parts:
+The logic of such an application is split into three separated parts:
 
+\vbox{%
 \begin{description}
-    \item[Model] -- represents applicaton state,
-    \item[Update] -- allows to update the state,
+    \item[Model] -- represents application state,
+    \item[Update] -- allows updating the state,
     \item[View] -- interprets state using HTML.
 \end{description}
+}
 
-This architecture has a similar approach to state modification as a popular state container called Redux.
-Redux is also used for frontend applications, most commonly with React view library.
+This architecture has a similar approach to state modification as famous state container called Redux.
+Redux is also used for frontend applications, most commonly together with the React view library.
 
 In oppose to React and Redux, Elm language was built with an architecture pattern in mind from the beginning.
-According to the official website\cite{elm-speed}, Elm is up to two times faster than same application written in React.
+According to the official website\cite{elm-speed}, Elm is up to two times faster than the same application written in React.
 
 The application is fully rendered locally in the user's web browser.
-That makes the server and client applications fully independent of each other.
+That makes the server and client applications entirely independent of each other.
 Development of both parts is, therefore, break up into two separate repositories.
