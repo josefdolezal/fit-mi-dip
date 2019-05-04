@@ -1,0 +1,85 @@
+\chapter{Development Guide}
+
+This guide contains instructions for running both the server and client side applications in the development environment.
+
+\section{Client-side Application}
+
+The application's source code is available at GitHub in the following repository:
+
+\begin{center}
+    \url{git@github.com:ds-wizard/dsw-client.git}
+\end{center}
+
+For building the application, the \texttt{Node.js} environment together with the \texttt{yarn} package manager is needed.
+The installation guide for the package manager is available at:
+
+\begin{center}
+    \url{https://yarnpkg.com/en/docs/install}
+\end{center}
+
+In the terminal, clone the repository change your working directory to the project root:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ git clone git@github.com:ds-wizard/dsw-client.git
+$ cd dsw-client
+\end{minted}
+
+Install the project dependencies:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ yarn install
+\end{minted}
+
+Run the application:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ yarn start
+\end{minted}
+
+
+The application is now running at \url{http://localhost:8080}.
+It expects the backend to be available at \url{http://localhost:3000}.
+
+\section{Server-side application}
+
+For the server-side application, the Stack tool is required.
+Installation guide for the Stack is available at:
+
+\begin{center}
+    \url{https://docs.haskellstack.org/en/stable/install_and_upgrade/}
+\end{center}
+
+You will also need a MongoDB database and a RabbitMQ messaging server.
+For simplicity, there is a \texttt{Docker compose} configuration publicly available at GitHub:
+
+\begin{center}\small
+    \url{https://github.com/josefdolezal/dockerfiles/tree/master/dsw-local}
+\end{center}
+
+Once your development environment is ready, clone the application repository and change your working directory to the project root:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ git clone git@github.com:ds-wizard/dsw-server.git
+$ cd dsw-server
+\end{minted}
+
+Create your application configuration file and fill in your settings:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ cp config/app-config.example.cfg config/app-config.cfg
+$ vim config/app-config.cfg
+\end{minted}
+
+Build the application from sources:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ stack build
+\end{minted}
+
+Run the server in a development configuration:
+
+\begin{minted}[linenos, bgcolor=bgcode]{sh}
+$ stack run dsw-server
+\end{minted}
+
+The application is now running at \url{http://localhost:3000}.
