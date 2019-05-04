@@ -1,47 +1,47 @@
 \section{Class diagram}\label{sec:class-diagram}
 
 In this section, I will introduce the class diagram for both the \textit{DSW Server} and the \textit{DSW Client} applications.
-This diagram is pratially based on the current state and outcomes of the analysis in chapter \ref{cptr:analysis}.
+This diagram is partially based on the current state and outcomes of the analysis in chapter \ref{cptr:analysis}.
 
-The diagram is split in to two parts -- one for the server side and one for the client side.
+The diagram is split into two parts -- one for the server side and one for the client side.
 Main entities are then further described for better understanding of the design.
 
-\subsection{Class diagram in context of functional programming}
+\subsection{Class diagram in the context of functional programming}
 
-In functional programming, generally used term \texttt{class} is either not used at all or (in case of Haskell, for example) has completely different meaning.
+In functional programming, the generally used term \texttt{class} is either not used at all or (in case of Haskell, for example) has an entirely different meaning.
 This, though, does not mean that complex data structures are not used.
 
-Both Haskell and Elm programming languages have concept of structured data called either \texttt{data} (in Haskell) or \texttt{type} (in Elm).
-These structures, however, does not encapsulated internal state and lack of methods.
+Both Haskell and Elm programming languages have the concept of structured data called either \texttt{data} (in Haskell) or \texttt{type} (in Elm).
+These structures, however, do not encapsulate internal state and lack of methods.
 
-To maintain consistency with terms used in context of software engineering, I decided to use generally know terms such as \textit{class diagram}.
-For such terms, user should always refer to this section to avoid misunderstanding.
+To maintain consistency with terms used in the context of software engineering, I decided to use generally know terms such as \textit{class diagram}.
+For such terms, the reader should always refer to this section to avoid misunderstanding.
 
 \subsection{Server class diagram}
 
-Firstly I would like to introduce class diagram for the server application.
+Firstly I would like to introduce a class diagram for the server application.
 The diagram is shown in figure \ref{fig:srv-class-diagram}.
 Entities on the left side the diagram are either newly introduced or existing entities which needed to be updated.
-On the right side of the diagram, there are entities (partialy transparent) which were used in the solution but were not modified, thus serves only for completenes of the diagram.
+On the right side of the diagram, there are entities (partially transparent) which were used in the solution but were not modified, thus serves only for completeness of the diagram.
 
 \image{fig:srv-class-diagram}{Server class diagram}{server-class-diagram.pdf}
 
 \subsubsection*{QuestionnaireMigrationState}
 
-This entity is used designed to hold state of the migration.
-It contains deep copy of the migrated questionnaire and an identifier of target knowledge model.
+This entity is used designed to hold the state of the migration.
+It contains a deep copy of the migrated questionnaire and an identifier of the target knowledge model.
 
-Initilly, this entity was design to also contain deep copy of both old and new version of the knowledge model.
-The maintaining team of the \gls{dsw} however removed knowledge model caching feature so knowledge models are always compiled from scratch\cite{gh-dsw-release-1.5}.
+Initially, this entity was design to also contain a deep copy of both an old and new version of the knowledge model.
+The maintaining team of the \gls{dsw}, however, removed knowledge model caching feature, so the knowledge models are always compiled from scratch\cite{gh-dsw-release-1.5}.
 
-Therefore, the all needed knowledge models are referred to only using unique identifiers.
+Therefore, all needed knowledge models are referred to only using unique identifiers.
 
-The state of the migrated question was added to questionnaire itself as the state needs to be preserved also once the migration is completed.
-The deep copy of the questionnaire is then used to create new copy of the questionnaire without modifying the orginal version.
+The state of the migrated question was added to the questionnaire itself as the state needs to be also preserved once the migration is completed.
+The deep copy of the questionnaire is then used to create a new copy of the questionnaire without modifying the original version.
 
 \subsubsection*{QuestionnaireState}
 
-Questionnaire state is a simple enumeration of three basic cases:
+Questionnaire state is a simple enumeration of three primary cases:
 
 \begin{itemize}
     \item \texttt{Default},
@@ -49,63 +49,64 @@ Questionnaire state is a simple enumeration of three basic cases:
     \item \texttt{Outdated}.
 \end{itemize}
 
-The \texttt{Default} state represents cases, where questionnaire is based on the latest version of the knowledge model (and no migration is therefore available).
-Once the user creates a migration for a questionnaire, it is moved into \texttt{Migrating} state and preserev in such state until the migration is either finish or canceled.
+The \texttt{Default} state represents cases, where the questionnaire is based on the latest version of the knowledge model (and no migration is therefore available).
+Once the user creates a migration for the questionnaire, it is moved into \texttt{Migrating} state and preserved in such a state until the migration is either finalized or canceled.
 
 The last possible state represents a questionnaire, which is based on an older version of the knowledge model and can be migrated to the newer one.
 
 \subsubsection*{QuestionFlags}
 
-Question flags represents state of migrated questions.
-Questionnaire holds a collection of \texttt{QuestionFlags} object, which is composed from question unique identifier and an set question flags (represented by \texttt{QuestionFlagType.}).
+Question flags represent a state of migrated questions.
+Questionnaire holds a collection of \texttt{QuestionFlags} object, which is composed of question unique identifier and a set of question flags (represented by \texttt{QuestionFlagType.}).
 
 Currently, at most one flag is allowed to be added to each question.
-\texttt{QuestionFlags} is however designed to keep arbitrary number of flags.
+\texttt{QuestionFlags} is however designed to keep an arbitrary number of flags.
 
 This makes such feature future proof as more flag types may be easily added later.
-On the other hand, such feature requires more complex management of the flags because integration constraints.
+On the other hand, such behavior requires more sophisticated management of the flags because of integration constraints.
 
 \subsubsection*{QuestionFlagType}
 
 This enumeration represents all possible types of migrated question state.
 Currently, only two cases are implemented: \texttt{NeedsReview} and \texttt{Resolved}.
 
-These cases corresponds to states identified in functional requirements in section \ref{sec:functional-requirements}.
-As described in previous section, these cases are currently mutually exclusive, therefore additional business logic needs to keep data consistent.
+These cases correspond to states identified in functional requirements in section \ref{sec:functional-requirements}.
+As described in the previous section, these cases are currently mutually exclusive.
+Therefore additional business logic needs to keep data consistent.
 
 \subsection{Client class diagram}
 
 In this section, I will discuss the design of the class diagram of the client application.
-For simplicity, the diagram only shows entities which were newly added as existing entities do not have major impact on design.
-The diagram is show in figure \ref{fig:client-class-diagram} and is further described in following sections.
+For simplicity, the diagram only shows entities which were newly added as existing entities do not have a significant impact on the design.
+The diagram is shown in figure \ref{fig:client-class-diagram} and is further described in the following sections.
 
-\image{fig:client-class-diagram}{Client class diagram with relationship between entities}{client-class-diagram}
+\image{fig:client-class-diagram}{Client class diagram with the relationship between entities}{client-class-diagram}
 
 \subsubsection*{Model}
 
 The \texttt{Model} entity is a base structure keeping the whole state of the questionnaire migration subapplication.
 The name was chosen according to Elm architecture described in section \ref{sec:frontend-application}.
 
-This entity is used as a \textit{source of truth} for the rest of the subapplication and whenever it changes, the whole view structure must be recreated from scratch.
+This entity is used as a \textit{source of truth} for the rest of the subapplication, and whenever it changes, the whole view structure must be recreated from scratch.
 
 \subsubsection*{TreeNode}
 
-This entity represents a single row in the questionnaire structure overview (the left panel on the figure \ref{fig:wf4}).
+This entity represents a single row in the questionnaire structure overview (the left panel on figure \ref{fig:wf4}).
 The \texttt{Model} entity keeps tree nodes in a lookup table so it can be quickly looked-up by its identifier.
 
-Because the hierarchy view needs to display some additional nodes (not presented in the questionnaire directly), it uses \textit{node path} to represent node location in the tree.
+Because the hierarchy view needs to display some additional nodes (not presented in the questionnaire directly), it uses the \textit{node path} to represent the node location in the tree.
 
 The path is a unique identifier which is made of node identifier composed with its all predecessor's identifiers.
-This allows to have duplicate nodes in the tree in a deterministic way (by adding custom nodes to the path).
+This allows having duplicate nodes in the tree in a deterministic way (by adding custom nodes to the path).
 
-All nodes contains its expansion state, path, list of successors' identifiers and its own type.
+All nodes contain its expansion state, path, list of successors' identifiers and its type.
 
 Children nodes are rendered using repeated lookups in the table of nodes mentioned above.
 
 \subsubsection*{TreeNodeType}
 
 The node type entity is used to differentiate between questionnaire node types.
-This allows render each node with sligthly different design so its visually recognizable to the user.
+This allows rendering each node with a sligthly different design, so it is visually recognizable to the user.
 
 \subsubsection*{ExpansionState}
 
@@ -114,8 +115,8 @@ This state may change every time the user toggles the expansion indicator.
 
 \subsubsection*{DiffState}\label{sec:diffstate}
 
-\texttt{DiffState} entity represents difference state of each node of the questionnaire.
-It is implemented as an enumeration with following cases:
+A \texttt{DiffState} entity represents a difference state of each node of the questionnaire.
+It is implemented as an enumeration with the following cases:
 
 \begin{enumerate}
     \item Unchanged,
@@ -124,22 +125,22 @@ It is implemented as an enumeration with following cases:
     \item Deleted.
 \end{enumerate}
 
-The \texttt{Unchanged} represents node, which was not edited between migrated versions of the knowledge model.
+The \texttt{Unchanged} represents a node, which was not edited between migrated versions of the knowledge model.
 
-The next type, \texttt{Created} is an constructor only accepting one node which represents the created node.
-When constructing such node, all texts in it are marked with the \texttt{Added} state so it can later visually represented to the user.
+The next type, \texttt{Created} is a constructor only accepting one node which represents the created node.
+When constructing such node, all texts in it are marked with the \texttt{Added} state so it can later visually br represented to the user.
 In this case, only the node in the right panel will be displayed.
 
-The \texttt{Modified} case accepts two nodes: old version and new version.
-Its texts are differentiate by letters, which allows to mark deleted and added letters.
+The \texttt{Modified} case accepts two nodes: the old version and new version.
+Its texts are differentiated by letters, which allows to mark deleted and added letters.
 The old version contains original texts with marked deleted letters.
 The new version, on the other hand, displays the current version of texts with marked added letters.
 
-Lastly, the \texttt{Deleted} node is an opposite to the \texttt{Created} node mentioned above.
+Lastly, the \texttt{Deleted} node is the opposite of the \texttt{Created} node mentioned above.
 It only displays the node in the left panel with all texts marked as deleted.
 
-This entity is directly created from knowledge model customization event.
-Because customization events are not sctructure hierarchically, the difference state cannot be directly mapped to the tree node and does not contain unique path.
+This entity is directly created from the knowledge model customization event.
+Because customization events are not structured hierarchically, the difference state cannot be directly mapped to the tree node and does not contain a unique path.
 
 \subsubsection*{DiffNode}
 
@@ -154,10 +155,10 @@ The constructors are
     \item AnswerDiffNode.
 \end{itemize}
 
-Each of these constructors further accepts data structure specialized for each node type so it can be properly rendered.
+Each of these constructors further accepts data structure specialized for each node type so it can be adequately rendered.
 
 \subsubsection*{NodeUuids}
 
-This structure is used to map identifiers between composed path (used in \texttt{TreeNode}) and unique node identifiers from knowledge model (used in \texttt{DiffState}).
+This structure is used to map identifiers between composed path (used in \texttt{TreeNode}) and unique node identifier from the knowledge model (used in \texttt{DiffState}).
 It is an pair containing path as a one component and node identifier as secong.
 Thanks to that, there is a quick way to find difference state for all tree nodes and vice versa.

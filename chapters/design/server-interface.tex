@@ -1,15 +1,15 @@
 \section{Server Interface}\label{sec:server-interface}
 
 In this section, I will discuss what interface is needed to be provided by the server to enable all required features.
-The interface is described in form of \gls{rest} \gls{api} endpoints.
+The interface is described in the form of \gls{rest} \gls{api} endpoints.
 All endpoints are further defined in individual sections.
 
 \subsection{Create questionnaire migration}
 
-This endpoint is used to create new questionnaire migration.
-The migration is created for questionnaire, whose identifier is passed as \gls{url} parameter.
+This endpoint is used to create a new questionnaire migration.
+The migration is created for the questionnaire, whose identifier is passed as a \gls{url} parameter.
 
-The other parameter, \texttt{targetPackageId} is passed in request body and represents identifier of newever version of the knowledge model.
+The other parameter, \texttt{targetPackageId} is passed in the request body and represents the identifier of the newer version of the knowledge model.
 
 \begin{itemize}
     \item \textbf{URL}
@@ -33,7 +33,7 @@ The other parameter, \texttt{targetPackageId} is passed in request body and repr
 Endpoint used to retrieve information about existing migration.
 The migration is searched for by migrated questionnaire identifier, which is passed in as a \texttt{URL} parameter.
 
-Returns an error code if there is no migration for given questionnaire.
+Returns an error code if there is no migration for the given questionnaire.
 
 \begin{itemize}
     \item \textbf{URL}
@@ -75,11 +75,11 @@ Cancels an existing migration by migrated questionnaire identifier passed in as 
 
 \subsection{Update migrated question state}
 
-Allows to update migrated question state by setting into \texttt{NeedsReview} or \texttt{Resolved} state.
+Allows updating migrated question state by setting it into \texttt{NeedsReview} or \texttt{Resolved} state.
 The questionnaire is identified by an identifier passed in as a \texttt{URL} parameter.
 
-New state is passed in as structure composed from question identifier and collection of question flags.
-When no flag is provided, question is set to the default state.
+The new state is passed in as a structure composed from question identifier and collection of question flags.
+When no flag is provided, the question is set to the default state.
 
 \begin{itemize}
     \item \textbf{URL}
@@ -100,8 +100,8 @@ When no flag is provided, question is set to the default state.
 
 \subsection{Finalize migration}
 
-This enpoint enables user to finalize existing migration and actually migrate the questionnaire from an older version of the knowledge model to a newer one.
-By calling this endpoint, new copy of the questionnaire (with new identifier) is created and saved along with the original version.
+This endpoint enables the user to finalize existing migration and migrate the questionnaire from an older version of the knowledge model to a newer one.
+By calling this endpoint, a new copy of the questionnaire (with a new identifier) is created and saved along with the original version.
 
 \begin{itemize}
     \item \textbf{URL}

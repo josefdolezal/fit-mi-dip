@@ -1,70 +1,70 @@
 \section{Questionnaire overview}\label{sec:questionnaire-overview}
 
-Questionnaire overview panel is used to visualise difference questionnaire nodes between.
+Questionnaire overview panel is used to visualize the difference between nodes from different questionnaire versions.
 This difference is modeled over previous and target knowledge model versions.
 Because each node is build using different data, its overview must be adjusted too.
 
 \subsection{Knowledge model difference}
 
 The only editable property of the knowledge model is its title.
-Therefore, the difference only shows user how its title's text changed (according to \ref{sec:diffstate}).
+Therefore, the difference only shows to the user how its title's text changed (according to \ref{sec:diffstate}).
 
 To achieve simplicity for the overview, nested nodes are not shown in this panel and are only visible in questionnaire structure as described in \ref{sec:questionnaire-structure}.
 
 \subsection{Chapter difference}
 
-Chapters are composed from title and detailed description (called \texttt{text}).
-As both of those properties might have changed, the user can see character-by-character difference of these texts.
+Chapters are composed of title and detailed description (called \texttt{text}).
+As both of those properties might have changed, the user can see the character-by-character difference of these texts.
 
-Similary to knowledge models difference, nested nodes (questions) are left out for the screen simplicity.
+Similarly to knowledge models difference, nested nodes (questions) are left out for the screen simplicity.
 
 \subsection{Question difference}
 
 Question node contains information about its title and description (also called \texttt{text}).
-Similary to chapters, both of these properties are displayed using character-by-character difference.
+Similarly to chapters, both of these properties are displayed using character-by-character difference.
 
-Because the overview should show most of the available questionnaire context to help the user get orientated, questions answers displayed too.
-The displayed information is based on question type.
-The descrtioption of the answer difference for each question type follows.
+Because the overview should show most of the available questionnaire context to help the user get orientated, questions answers are displayed too.
+The displayed information is based on the question type.
+The description of how the answer differs for each question type follows.
 
 \subsubsection*{Value question type}
 
 This type represents an open-ended question.
-While filling questionnaire, the user is allowed to input arbitrary text.
+While filling the questionnaire, the user is allowed to input an arbitrary text.
 
-To achieve the greatest similarity, the user's is rendered as a readonly value under the question as it would be in the questionnaire.
+To achieve the highest similarity, the user's reply is rendered as a read-only value under the question as it would be in the questionnaire.
 
 \subsubsection*{Options question type}
 
-Options represents a single-choice question.
-User replies to this question by selection one of the offered answers.
+Options represent a single-choice question.
+User replies to this question by selecting one of the offered answers.
 
-Under the question difference, all answers are shown as a readonly single-choice options.
+Under the question difference, all answers are shown as read-only single-choice options.
 The options are rendered in the exact state they appear in the knowledge model.
-If the user selected certain answer while filling the questionnaire, it will be marked.
+If the user selected a specific answer while filling the questionnaire, it would be marked.
 
 \subsubsection*{Item templates question type}
 
-This type represents an question type described in section \ref{sec:meta-nodes}.
-Because item template may contain complex nested structures which would be confusing in this context, it was desided not to show it.
-Instead, the user can see information about how many answers he replied and is referenced to navigate to the left panel to see the difference.
+This type represents a question type described in section \ref{sec:meta-nodes}.
+Because item template may contain complex nested structures which would be confusing in this context, it was decided not to show it.
+Instead, the user can see information about how many answers he replied and is referenced to navigate to the left panel to see the nested questions.
 
 \subsection{Answer difference}
 
-Answer represents single-choice option answer for the question.
-This node contains label and advice texts.
-These text are differenced as others text in the overview panel.
+The answer represents a single-choice option answer for the question.
+This node contains a label and advice texts.
+These texts are differenced as other texts in the overview panel.
 
 Follow-up questions nested in the answer are not displayed directly in the overview and are only visible in the questionnaire structure.
 
 \subsection{Tags difference}
 
-In the client application analylisis in chapter \ref{cptr:analysis}, I briefly introduced new feature called \textit{tags} used to group questions into logical parts.
-As this feature is not completely done at the time of the writing, question tags changes are currently ignored.
+In the client application analysis in chapter \ref{cptr:analysis}, I briefly introduced a new feature called \textit{tags} used to group questions into logical parts.
+As this feature is not entirely done at the time of the writing, question tags changes are currently ignored.
 
-\subsection{Incompatile question answer}
+\subsection{Incompatible question answer}
 
-On of the non-function requirements indentified in section \ref{sec:non-functional-requirements} demands question replies to be preserved after the migration is done.
-This is, however, only possible for if the question type was not changed.
+One of the non-functional requirements identified in section \ref{sec:non-functional-requirements} demands the question replies to be preserved after the migration is finalized.
+This is, however, only possible if the question type was not changed.
 
-If the question type was modified, user is noticed that his answer is not applicable in the newever version and is recommended to mark question for later review.
+If the question type was modified, the user is noticed that his answer is not applicable in the newer version and is recommended to mark question for later review.
