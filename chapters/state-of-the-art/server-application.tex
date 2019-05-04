@@ -172,7 +172,7 @@ As mentioned before, the data are internally stored in binary format which is no
 Therefore the database driver exposes two special Typeclasses\footnote{More information about Haskell Typeclasses are available at https://www.haskell.org/tutorial/classes.html} for encoding and decoding binary formatted data.
 Such typeclasses must be implemented by all types which will be stored in database.
 
-\hscode{code:bson-mapping}{Example of Typeclasses used to transform Model object into binary representation}{haskell-bson-mapping.hs}
+\hscode{code:bson-mapping}{Example of Typeclasses used to transform the Model object into binary representation}{haskell-bson-mapping.hs}
 
 In addition to coding typeclasses, the driver also exposes a type-safe interface to build \gls{crud} queries.
 These queries are created using simple \gls{dsl} as shown in example \ref{code:dao}.
