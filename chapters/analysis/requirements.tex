@@ -4,65 +4,65 @@ In this section, I will define functional and non-functional requirements for th
 
 \subsection{Functional requirements}\label{sec:functional-requirements}
 
-This section will introduce list of identified functional requirements to the reader.
-The requirements are following:
+This section will introduce a list of identified functional requirements to the reader.
+There are the following requirements:
 
 \requirement{FR1 -- User is notified about available upgrade}{%
-User is visually notified when newer version of knowledge model is available for given questionnaire.
+User is visually notified when a newer version of the knowledge model is available for the given questionnaire.
 }
 
 \requirement{FR2 -- Create questionnaire migration}{%
-This requirement enables user to create new questionnaire migration from current knowledge model to its newer version.
+This requirement enables the user to create new questionnaire migration from current knowledge model to its newer version.
 }
 
 \requirement{FR3 -- Explore questionnaire on new knowledge model}{%
-User is able to see preview of migrated questionnaire before the questionnaire is fully migrated.
-This includes preview of all questionnaire nodes together with answer from previous knowledge model version.
+User can see a preview of the migrated questionnaire before the questionnaire is fully migrated.
+This includes a preview of all questionnaire nodes together with the user's replies from previous knowledge model version.
 }
 
-\requirement{FR4 -- Guide user through list of changes}{%
-User is guided by system through changes relevant to migrated questionnaire.
+\requirement{FR4 -- Guide user through the list of changes}{%
+User is guided by the system through changes relevant to the migrated questionnaire.
 }
 
 \requirement{FR5 -- Resolve question change}{%
-Question change may be marked as resolved so user does not have to remember which changes needs to be reviewed before the questionnaire is migrated.
+Question change may be marked as resolved, so the user does not have to remember which changes need to be reviewed before the questionnaire is migrated.
 }
 
-\requirement{FR6 -- Display node difference betweeen versions}{%
-Questionnaire nodes are shown in both old version and new version with visual representation of textual changes (removed, changed or added characters).
+\requirement{FR6 -- Display node difference between versions}{%
+Questionnaire nodes are shown in both the old version and new version with a visual representation of textual changes (removed, changed or added characters).
 }
 
 \requirement{FR7 -- Mark question change for review}{%
-Allows user to mark questions which needs to be carefully reviewed once the migration is done.
-This enables user to adjust open-ended answers or choose different choose different answer in hierarchical tree.
+Allows user to mark questions which need to be carefully reviewed once the migration is done.
+This enables the user to adjust open-ended answers or choose a different choose different answer in the hierarchical tree.
 }
 
 \requirement{FR8 -- Migrate questionnaire}{%
 User is allowed to finish migration and upgrade questionnaire knowledge model version.
 }
 
-\requirement{FR9 -- Cancel questionnaire migraiton}{%
-Questionnaire migration which was not finished by user may be canceled without affecting current questionnaire.
+\requirement{FR9 -- Cancel questionnaire migration}{%
+Questionnaire migration which was not finalized by the user may be canceled without affecting the original questionnaire.
 }
 
 \subsection{Non-functional requirements}\label{sec:non-functional-requirements}
 
-Now, I would like to discuss non-functional requirements of the system.
-These requirements specify entitlements for system and further define functional requirements.
+Now, I would like to discuss the non-functional requirements of the system.
+These requirements specify entitlements for system and further define the functional requirements.
 
 \requirement{NR1 -- User authentication}{%
 User is only allowed to create, modify, finish and cancel migration of questionnaires belonging to him.
-System administrator is allowed to migrate arbitrary questionnaire.
-Unauthicated users are not authorized to access migration feature at all.
+The system administrator is allowed to migrate an arbitrary questionnaire.
+Unauthenticated users are not authorized to access the migration feature at all.
 }
 
 \requirement{NR2 -- Migrated question consistency}{%
-Question may be either unmarked, marked as resolved or marked for later review.
-Other states are ilegeal.
+The question may be either unmarked, marked as resolved or marked for later review.
+Other states are illegal.
 }
 
 \requirement{NR3 -- Preserve existing replies}{%
-If user's reply to question with new knowledge model (for example question type did not change), it must be preserved.
+If the user's reply to a question is compatible with the new knowledge model (for example, the question type did not change), it must be preserved.
 }
 
 \requirement{NR4 -- State synchronization}{%
@@ -70,5 +70,5 @@ Question state is synchronized automatically without user interaction.
 }
 
 \requirement{NR5 -- Migration interoperability}{%
-Questionnaire migrations are integrated into existing system and is compatible with its domain model.
+Questionnaire migrations are integrated into the existing system and are compatible with its domain model.
 }

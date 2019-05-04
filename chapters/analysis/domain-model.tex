@@ -1,9 +1,9 @@
 \section{Domain model}\label{sec:domain-model}
 
-Following analysis of requirements, use cases and their scenarios, I will further introduce the domain model.
-By domain model, we understand a conceptual model of the domain that incorporates both behaviour and data\cite{wiki-domain-model}.
+After the analysis of requirements, use cases and their scenarios, I will further introduce the domain model.
+By domain model, we understand a conceptual model of the domain that incorporates both behavior and data\cite{wiki-domain-model}.
 
-Based on the previous analysis, I identified following entities:
+Based on the previous analysis, I identified the following entities:
 
 \begin{itemize}
     \item QuestionnaireMigration,
@@ -17,7 +17,7 @@ Based on the previous analysis, I identified following entities:
 \end{itemize}
 
 Figure \ref{fig:domain-model} shows all identified entities and relationships between them.
-Some of the entities already exists in the \gls{dsw}, my analysis was therefore also based on Ing. Vojtěch Knaisl's master's thesis\cite{mt-knails} previously mentioned in chapter \ref{cptr:state-of-the-art}.
+Some of the entities already exist in the \gls{dsw}; my analysis was therefore also based on Ing. Vojtěch Knaisl's master's thesis\cite{mt-knaisl} previously mentioned in chapter \ref{cptr:state-of-the-art}.
 Such entities are explicitly marked in the following list of entities.
 
 \image{fig:domain-model}{Domain model with relationships between entities}{domain-model}
@@ -26,17 +26,17 @@ Such entities are explicitly marked in the following list of entities.
 
 This entity represents the migration itself.
 It is composed using all entities which are required to create the migration context.
-The requirements demands that there must be at most one migration for each questionnaire in one moment.
+The requirements demand that there must be at most one migration for each questionnaire in one moment.
 
-Migration is created by user when he wants to use newer version of knowledge model.
+Migration is created by the user when he wants to use a newer version of the knowledge model in his questionnaire.
 
 \subsection{DiffEvent entity}
 
-This entity represents an event which occured during knowledge model customization.
+This entity represents an event which occurred during the knowledge model customization.
 Events are further described in section \ref{sec:event-driven-architecture}.
 Data stewards create events while making customization to the knowledge model in \texttt{KMEditor} module (discussed in \ref{sec:kmeditor-module}).
 
-The list of events is used to create set of changes which are presented to the user.
+The list of events is used to create a set of changes which are presented to the user.
 
 This entity is already part of the application.
 
@@ -45,51 +45,51 @@ This entity is already part of the application.
 The \texttt{Questionnaire} entity represents currently migrated questionnaire.
 It is created by an arbitrary user in the \texttt{Questionnaires} module (described in \ref{sec:questionnaires-module}).
 
-\texttt{QuestionnaireMigration} module use questionnaires to make preview of changes in context of the user answers.
+\texttt{QuestionnaireMigration} module uses questionnaires to make a preview of changes in the context of the user answers.
 
 \subsection{KnowledgeModel entity}
 
-Knowledge models contains hierarchical structure of chapters, questions and answers.
-In the migration, it is used to for comparisons between new and previous versions of the knowledge model.
+Knowledge models contain the hierarchical structure of chapters, questions, and answers.
+In the migration, it is used for comparisons between new and previous versions of the knowledge model.
 
-There is an special structure called \texttt{DiffKnowledgeModel} used in the migration process.
-It has the same structure as migrated knowledge model but contains also nodes, which were deleted -- this enables user to explore context of nodes which will no longer be available after the migration is finished.
+There is a unique structure called \texttt{DiffKnowledgeModel} used in the migration process.
+It has the same structure as the migrated knowledge model but also contains nodes, which were deleted -- this enables the user to explore the context of nodes which will no longer be available after the migration is finished.
 
-\texttt{KnowledgeModel} entity is already part of the application.
+The \texttt{KnowledgeModel} entity is already part of the application.
 
 \subsection{QuestionFlag entity}
 
 Flags are used to represent question state.
-Since flags are not only used during migration, but also in questionnaire preview, the are related to the questionnaire instead of migration.
+Since flags are not only used during migration but also in the questionnaire preview, flags are related to the questionnaire instead of migration.
 
 \subsection{Chapter entity}
 
 Chapters are used to group questions into logical parts.
-In addition to relation to questions, chapters contains title and description text.
+In addition to relation to questions, chapters contains a title and a description text.
 
 This entity is already part of the application.
 
 \subsection{Question entity}
 
-Questions are used to questionnaires to collect data from users.
-This entity is created by the application when creating (building) knowledge model from list of events.
+Questions are in questionnaires used to collect data from the users.
+This entity is created by the application when creating (building) knowledge model from a list of events.
 
 This entity is already part of the application.
 
 \subsection{Answer entity}
 
-This entity is used represent answer replied by user to a question.
-There are more types of question such as open-ended, single choice or structured (composed from another questions).
+This entity is used to represent an answer replied by user to a question.
+There are more types of question such as open-ended, single choice or structured (composed from other questions).
 
-Single choice answers may also have follow-up questions which needs to be prelied to too.
+Single choice answers may also have follow-up questions which need to be replied to too.
 
 The answer entity is already part of the application.
 
 \subsection{Reply entity}
 
-Reply entitiy represents selected answer for questionnaire question.
-It is created by user when filling up questionnaire in \texttt{Questionnaires} module.
+Reply entity represents the selected answer for questionnaire question.
+It is created by the user when filling up the questionnaire in \texttt{Questionnaires} module.
 
-Non-functional requirements demands to preserve the reply if it is compatible with newer knowledge model.
+Non-functional requirements demand to preserve the reply if it is compatible with newer knowledge model.
 
 This entity is already part of the application.

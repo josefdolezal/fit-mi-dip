@@ -1,20 +1,20 @@
 \section{Use cases}\label{sec:use-cases}
 
-Based on identified requirements from previous section, I would like to further discuss application use cases covering these requirements.
-The use cases are initiated by authenticated users without need of increased permissions.
+Based on identified requirements from the previous section, I would like to further discuss application use cases covering these requirements.
+The use cases are initiated by authenticated users without the need for increased permissions.
 All identified use cases together with short description are listed below.
 
 
-\requirement{UC1 -- Create questionnaire migration}{%
-Enables user to start questionnaire migration process in case he is notified about new knowledge model version availability.
+\requirement{UC1 -- Initiate questionnaire migration}{%
+Enables user to start the questionnaire migration process in case he is notified about new knowledge model version availability.
 }
 
 \requirement{UC2 -- Cancel questionnaire migration}{%
-Enables user to discard process of the questionnaire migration without affecting state of the initial questionnaire or its replies.
+Enables user to discard process of the questionnaire migration without affecting the state of the initial questionnaire or its replies.
 }
 
 \requirement{UC3 -- Display migration change context}{%
-Enables user to navigate through the new knowledge model version in context of filled in questionnaire replies.
+Enables user to navigate through the new knowledge model version in the context of filled in questionnaire replies.
 }
 
 \requirement{UC4 -- Change migrated question state}{%
@@ -22,8 +22,8 @@ Enables user to modify changed question state to one of the following states:
 
 \begin{itemize}
     \item Initial state -- changed question without state modification,
-    \item Needs review -- change needs to be review after migration is finished,
-    \item Resolved -- change does not affect user's previous answer.
+    \item Needs review -- a change needs to be reviewed after the migration is finalized,
+    \item Resolved -- a change does not affect the user's previous answer.
 \end{itemize}
 }
 
@@ -58,8 +58,9 @@ Table \ref{table:uc-x-fr} shows how all identified requirements are covered by u
    \label{table:uc-x-fr}
 \end{table}
 
-Figure \ref{fig:use-case-diagram} shows use cases diagram together with relationships between them.
+Figure \ref{fig:use-case-diagram} shows the use cases diagram together with relationships between them.
 Since questionnaire migration feature is integrated into the system only for authenticated users, the diagram contains exactly one actor.
-The analysis of non-functional requirements shows that all authenticated users (regardless role) are allowed to manage migrations, therefore only one role is used.
+The analysis of non-functional requirements shows that all authenticated users (regardless of role) are allowed to manage migrations.
+Therefore only one role is used.
 
 \image[0.8\textwidth]{fig:use-case-diagram}{Use cases relationship diagram}{use-case-diagram.pdf}
