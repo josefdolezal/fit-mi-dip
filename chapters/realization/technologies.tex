@@ -10,78 +10,80 @@ Here, I will briefly highlight the main parts.
 
 \subsubsection*{Haskell programming language}
 
-The server part of the application is fully implemented in Haskell programming language.
-Haskell is a purely functional programming language, which means that all functions are \textit{pure}\cite{haskell-web}.
+The server part of the application is fully implemented in the Haskell programming language.
+Haskell is a purely functional programming language.
+It means that all functions are \textit{pure} and all data are immutable\cite{haskell-web}.
 By pure functions, we understand every function which is free of side effects.
-Thanks to side effects elemination, functions becomes simpler and easier to reason about -- each function will for the same input return the same output every time.
+Thanks to side effects elimination, functions become more straightforward and more comfortable to reason about -- each function will for the same input return the same output every time.
 
-Because the whole server application was already built in Haskell, there was not much space for choosing programming language.
+Because the entire server application was already built in Haskell, there was not much space for choosing a programming language.
 
 The migration tool could be built as an individual service (often called microservice \cite{micros-web}) in an arbitrary programming language.
-This would, however, introduce unnecessary complexity in development itself, but also in deployment and and application management.
+This would, however, introduce unnecessary complexity in development itself, but also deployment and application management.
 
-Because building microservice would mean to rebuild vast majority of existing application (significant part of the model layer and the \gls{api} layer), I decided to implement the migrator as a new module which is part of the existing code base.
+Because building microservice would mean to rebuild the vast majority of the existing application (an significant part of the model layer and the \gls{api} layer), I decided to implement the migrator as a new module which is part of the existing code base.
 
 \subsubsection*{Integrated Development Environment}
 
-\gls{ide} is an software application integrating numerous tools helping faster development\cite{ssq-ide}.
-Such application helps with code syntax highglighting, compiling, testing or even deploying developed application.
+\gls{ide} is a software application integrating numerous tools for helping faster development\cite{ssq-ide}.
+Such application helps with code syntax highlighting, compiling, testing or even deploying the developed application.
 
-To name a few, applications like Atom, Visual Studio Code or IntelliJ IDEA support development using Haskell\footnote{Haskell is usually not supported out of the box by \gls{ide}s. Instead, plugin with language support and advanced features needs to be installed. Those plugins are usually based on either \texttt{ghc-mod} or \texttt{Intero} libraries.}.
+To name a few, applications like Atom, Visual Studio Code or IntelliJ IDEA support development in Haskell\footnote{Haskell is usually not supported out of the box by \gls{ide}s. Instead, a plugin with language support and advanced features needs to be installed. Those plugins are usually based on either \texttt{ghc-mod} or \texttt{Intero} libraries.}.
 
-For project as extensive as \gls{dsw} is, neither of those applications was working correctly.
-All of the mentioned suffered by bad performance, invalid symbols recognition and invalid error reporting.
+For a project as extensive as \gls{dsw} is, neither of those applications was working correctly.
+All of the mentioned suffered by lousy performance, invalid symbols recognition, and invalid error reporting.
 
 After consultation with team members of the \gls{dsw} maintainers, I decided to turn off all advanced language support and used only syntax highlighting in IntelliJ IDEA.
-Such disadvantage has unfortunately significant impact on the development time and orientation in the project.
+Such disadvantage had unfortunately significant impact on the development time and orientation in the project.
 
 \subsubsection*{Scotty web framework}
 
-The communication between server and client application is done using \gls{rest} \gls{api}.
-The \gls{api} interface id built on top of the \textit{Scotty web framework}.
+The communication between the server and the client application is done using the \gls{rest} \gls{api}.
+The \gls{api} interface is built on top of the \textit{Scotty web framework}.
 
-Scotty is an framework written in Haskell which allows to create type-safe \gls{api} routing and provides convenience helper functions to parse \gls{http} requests.
+Scotty is a framework written in Haskell which allows to create type-safe \gls{api} routing and provides convenient helper functions to parse \gls{http} requests.
 
 Most of the work with integrating Scotty with \gls{dsw} was already done when I joined the project.
 My only interaction with the framework was to register all supported routes for the migration tool and convert data between internal representation and public \gls{json}.
 
 \subsection{Client application}
 
-Similary to the server tooling, used technologies were already decided by the \gls{dsw} maintainers in the beginning of the project.
+Similarly to the server tooling, used technologies were already decided by the \gls{dsw} maintainers at the beginning of the project.
 In the application analysis in chapter \ref{cptr:analysis}, I described in depth the client side application architecture and its base modules.
-In this section, I would like to briefly summarize tools and used technologies.
+In this section, I would like to summarize tools and used technologies briefly.
 
 \subsubsection*{Elm programming language}
 
-The whole client application is currently written in Elm programming language (described in \ref{sec:frontend-application}).
-Elm is an functional language with similar syntax to Haskell.
+The entire client application is currently written in the Elm programming language (described in \ref{sec:frontend-application}).
+Elm is a functional language with similar syntax to Haskell.
 Its base in building frontend application lays in unidirectional architecture called \texttt{Elm architecture}.
 
 The term unidirectional describes how data are passed through the application.
-In Elm, the data are always passed one way, through its base architectural pattern represented by \texttt{model}, \texttt{update} and \texttt{view}.
-The application state is represented by \texttt{model}, changed using \texttt{update} function and then represented in \texttt{view}.
+In Elm, the data are always passed one way, through its base architectural pattern represented by the \texttt{model}, \texttt{update} and \texttt{view}.
+The application state is represented by the \texttt{model}, changed using \texttt{update} function and then presented in \texttt{view}.
 
-The great advantage of using Elm is that its functional approach may be shared and discussed with server-side team bacause of syntax similarity.
+The great advantage of using Elm is that its functional approach may be shared and discussed with the server-side team because of syntax similarity.
 
-Even though both languages are functional, there are few differencies\cite{mmh-elm-func-fe} I would like to point out two biggest.
+Even though both languages are functional, there are few differencies\cite{mmh-elm-func-fe}.
+I would like to point out the two most significant.
 
-First one is lack of \textit{typeclasses} in Elm.
+First one is lack of \textit{Typeclasses} in Elm.
 Such disadvantage makes it harder to create generic constraints which are widely used in Haskell.
 This makes Elm \texttt{core} library more verbose as functions such as \texttt{map} must be implemented for each type individually.
 
-On the other hand, Elm's record syntax is much more powerfull then Haskell's.
-In Elm, all records may be automatically used as free functions (taking object as argument and return record value) out of the box.
-Records, thus, may be used in function composition in combination with functions like \texttt{Maybe.map}.
-This makes the code easily readable and manitainable.
+On the other hand, Elm's record syntax is much more powerful than Haskell's.
+In Elm, all records may be automatically used as free functions (taking an object as argument and returning record value) out of the box.
+Records, thus, may be used in function composition, in combination with functions like \texttt{Maybe.map}.
+This makes the code easily readable and maintainable.
 
-Haskell offers similar feature by using \texttt{lenses} language extension, it however requires records to be structured in a specific way which makes harder to read.
+Haskell offers a similar feature by using \texttt{lenses} language extension; it, however, requires records to be structured in a specific way which makes harder to read.
 
 \subsubsection*{Integrated Development Environment}
 
-After the struggle I had with choosing the right Haskell \gls{ide}, I decided to keep Elm environment as simple as possible.
-I choose Visual Studio Code (or \textit{VS Code}, for short) for development as it is lightweight and based on my own experience it is faster and more responsible.
+After the struggle I had with choosing the right Haskell \gls{ide}, I decided to keep the Elm environment as simple as possible.
+I chose the Visual Studio Code (or \textit{VS Code}, for short) for development as it is lightweight, and based on my own experience, it is faster and more responsible.
 
-I used VS Code together with \textit{elm}\cite{gh-elm-pg} plugin which enables features like syntax highlighting, error reporting, type definitions and "jump to definition".
+I used the VS Code together with \textit{elm}\cite{gh-elm-pg} plugin which enables features like syntax highlighting, error reporting, type definitions and "jump to definition".
 This made my onboarding on the project much faster and development more convenient than doing the same things on the server side.
 
 \subsubsection*{Node environment and Webpack}
@@ -89,48 +91,50 @@ This made my onboarding on the project much faster and development more convenie
 Because Elm runs in an internet browser, it needs some kind of a web server to handle requests and serve the application to the user.
 In production, open-source servers like NGINX\footnote{NGINX homepage: \url{https://www.nginx.com}.} or Apache\footnote{Apache HTTP server homepage: \url{https://httpd.apache.org}.} are often used\cite{nc-webservers}.
 
-For development purpose, Elm offers simple \gls{http} server called \textit{rector}.
-With reactor, developer is able run arbitrary Elm source code in a browser.
+For development purpose, Elm offers a simple \gls{http} server called \textit{reactor}.
+With reactor, the developer is able to run an arbitrary Elm source code in a browser.
 
-Reactor is however shipped with its own \gls{html} template which means that all code used in application \gls{html} will not be loaded.
+The reactor is however shipped with its own \gls{html} template which means that all code used in application \gls{html} will not be loaded.
 This includes stylesheets, custom JavaScript scripts or \textit{ports} (Elm-to-Javascript interoperability \gls{api}).
 
-Together with Elm code, application sources also contains \glsentryshort{sass} which are compiled into standard \glsentryshort{css}.
-Therefore, building the application is a multistep process -- such process, however, can not be handled by reactor.
+Together with Elm code, application sources also contains \glsentryshort{sass} which is compiled into standard \glsentryshort{css}.
+Therefore, building the application is a multistep process -- such process, however, can not be handled by the reactor.
 
-There are many solutions to this problem, the maintaning team of \gls{dsw} choose the \texttt{Node.js}\footnote{Node.js$^\textrm{\textregistered}$ is a JavaScript runtime built on Chrome's V8 JavaScript engine.} environment together with \texttt{Webpack} tool.
+There are many solutions to this problem, the maintaining team of \gls{dsw} chose the \texttt{Node.js}\footnote{Node.js$^\textrm{\textregistered}$ is a JavaScript runtime built on Chrome's V8 JavaScript engine.} environment together with \texttt{Webpack} tool.
 
-Webpack is used to compile all application sources with appropriate compiler and creates application bundle from output.
-Webpack is also shipped with development server (as a separate tool) which is able to watch application sources and run compiler whenever the source changes.
-In addition to that, It is also capable of refreshing browser window so the changes are visible immediately.
+Webpack is used to compile all application sources with appropriate compilers and creates an application bundle from output.
+Webpack is also shipped with development server (as a separate tool) which is able to watch application sources and run compiler whenever the source change.
+In addition to that, It is also capable of refreshing the browser window, so the changes are visible immediately.
 
 The production build is also done using Webpack which will also set production configuration to all bundled sources.
 
 \subsubsection*{Text Difference}
 
-The functional requirements from section \ref{sec:functional-requirements} says that the application should show the exact text difference for all migrated questionnaire nodes.
-Because there is no information about the migration differences stored on the server, this feature is fully implemented on client side.
+The functional requirements from section \ref{sec:functional-requirements} say that the application should show the exact text difference for all migrated questionnaire nodes.
+Because there is no information about the migration differences stored on the server, this feature is fully implemented on the client side.
 
-Problem of finding the difference between two given texts is called \textit{string metric} (also known as \textit{similarity metric} or \textit{string distance})\cite{wiki-string-metric}.
+The problem of finding the difference between two given texts is called \textit{string metric} (also known as \textit{similarity metric} or \textit{string distance})\cite{wiki-string-metric}.
 There are multiple algorithms solving string distance problem.
 To name a few, there is the Myers' algorithm\cite{art-myer} and Wu's algorithm\cite{art-wu} which are based on the same idea.
-Wu's algorithm, however, achievs up to four times better performance for strings, which shares most of the strings' characters.
+Wu's algorithm, however, achieves up to four times better performance for strings, which shares most of the strings' characters.
 
 In migrations, I assume the string differences will be in most cases rewordings or typo corrections.
-Therefore the Wu's algorithm is a great fit for this problem.
+Therefore the Wu's algorithm is an excellent fit for this problem.
 
 This algorithm is implemented in \texttt{elm-diff}\cite{epkg-elm-diff} open-source library.
-For any given collection of elements, it will return new collection with difference information for each element.
-Such elements may be in following states:
+For any given collection of elements, it will return a new collection with the difference information for each element.
+Such elements may be in the following states:
 
+\vbox{%
 \begin{itemize}
     \item NoChange,
     \item Added,
     \item Removed.
 \end{itemize}
+}
 
-With a slight modification, it can be used to recieve strings (which are not collections in Elm) directly.
-The output can be then used to render string character-by-character and highlighting it with appropriate color.
+With a slight modification, it can be used to receive strings (which are not collections in Elm) directly.
+The output can be then used to render string character-by-character and highlighting it with the appropriate color.
 The usage of string difference (built on top of the \texttt{elm-diff}) is shown in \ref{code:elm-diff}.
 
 \elmcode{code:elm-diff}{String difference using \texttt{elm-diff}}{elm-diff.elm}

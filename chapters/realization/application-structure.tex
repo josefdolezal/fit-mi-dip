@@ -1,14 +1,14 @@
 \section{Application structure}\label{sec:application-structure}
 
-After a summary of the used tools, I would like to acquaint the reader with structure of both server and client applications.
+After a summary of the used tools, I would like to acquaint the reader with the structure of both server and client applications.
 The structure for each of the applications corresponds to sections listed in analysis in chapter \ref{cptr:analysis}.
-For more detailed description of modules, please reffer to appropriate section in the chapter mentioned above.
+For a more detailed description of modules, please refer to the appropriate section in the chapter mentioned above.
 
 \subsection{Server application structure}
 
-Firstly, I would like to introduce structure of the server application.
+Firstly, I would like to introduce the structure of the server application.
 The structure reflects structure beginning in the project root.
-Some directories in the project contains significant amount of subdirectories, which are not important in context of this thesis.
+Some directories in the project contain a significant amount of subdirectories, which are not crucial in the context of this thesis.
 These directories are omitted and replaced by an ellipsis (\dots) sign.
 The structure is shown in figure \ref{fig:server-structure}.
 
@@ -28,7 +28,7 @@ The structure is shown in figure \ref{fig:server-structure}.
 		.2 scripts\DTcomment{build scripts}.
 		.2 templates\DTcomment{management plans and emails templates}.
 		.2 test\DTcomment{applications tests}.
-		.2 vendor\DTcomment{custom thirdparty libraries}.
+		.2 vendor\DTcomment{custom third-party libraries}.
     }
     \caption{Structure of the server application}\label{fig:server-structure}
 \end{figure}
@@ -36,24 +36,24 @@ The structure is shown in figure \ref{fig:server-structure}.
 \subsection{Client application structure}
 
 In this section, I will introduce the client application structure.
-Similary to the server application structure, individual modules are desribed in detail in chapter \ref{cptr:analysis}.
+Similarly to the server application structure, individual modules are described in detail in chapter \ref{cptr:analysis}.
 The structure in figure \ref{fig:client-structure} lists main application modules.
 Modules, which are not related to this thesis are left out and grouped using an ellipsis (\dots) sign.
 
 The client application project folder contains other sources then Elm source files.
-Theses are not relevant to this and therefore the structure only shows sources located in \texttt{src/elm} directory.
+These are not relevant to this thesis and therefore the structure only shows sources located in the \texttt{src/elm} directory.
 
 \begin{figure}[H]
     \dirtree{%
         .1 /src/elm.
-        .2 KMEditor\DTcomment{the file with CD contents description}.
-        .2 KnowledgeModels\DTcomment{the file with CD contents description}.
-        .2 Questionnaires\DTcomment{the file with CD contents description}.
-        .3 Create\DTcomment{the file with CD contents description}.
-        .3 Edit\DTcomment{the file with CD contents description}.
-        .3 Migration\DTcomment{the file with CD contents description}.
-        .4 DiffOverview\DTcomment{the file with CD contents description}.
-        .4 DiffTree\DTcomment{the file with CD contents description}.
+        .2 KMEditor\DTcomment{knowledge models editor module}.
+        .2 KnowledgeModels\DTcomment{knowledge models preview module}.
+        .2 Questionnaires\DTcomment{questionnaire management module}.
+        .3 Create\DTcomment{module for creating a new questionnaire}.
+        .3 Edit\DTcomment{module for editing an existing questionnaire}.
+        .3 Migration\DTcomment{questionnaire migration module}.
+        .4 DiffOverview\DTcomment{questionnaire diff view}.
+        .4 DiffTree\DTcomment{questionnaire structure view}.
         .3 \dots\quad\DTcomment{modules unrelated to this thesis}.
         .2 \dots\quad\DTcomment{modules unrelated to this thesis}.
     }
