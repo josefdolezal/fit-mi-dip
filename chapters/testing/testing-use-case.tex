@@ -1,40 +1,46 @@
 \section{Testing use case}\label{sec:testing-use-case}
 
-In this section, I will demonstrate a non-trivial use case proving correctnes of the solution.
-Firstly, I will specify an input state of the testing case and acquaint the reader with expected result for such input.
-Then, I will summarize migrator steps as described in the application design in chapter \ref{cptr:design} and compare the actual result with the expected one.
+In this section, I will demonstrate a non-trivial use case showing how the system should behave.
+Firstly, I will specify an input state of the testing case.
+The, I will acquaint the reader with the expected result for such input.
 
 \subsection{Test input state}
 
 For the input, I will assume a list of events, which are needed to be presented to the user during the migration process.
-The given list will be visualized in a tree structure representing original knowledge model on which the events are applied (in oppose to questionnaire structure, it ignores user's replies).
-In this tree, I will use following notation for each node: \inbox{bgcode}{\texttt{[STATE] (ID) Title $<$Type$>$}}, where:
+The given list will be visualized in a tree structure representing the original knowledge model on which the events were applied (in oppose to questionnaire structure, it ignores the user's replies).
+In this tree, I will use following notation for each node:
+
+\begin{center}
+    \inbox{bgcode}{\texttt{[STATE] (ID) Title $<$Type$>$}}
+\end{center}
+
+, where:
 
 \begin{itemize}
-    \item \texttt{[STATE]} stands for difference state (either \texttt{D} for deleted, \texttt{U} for unchanged, \texttt{A} for added or \texttt{M} for modified),
+    \item \texttt{[STATE]} stands for the difference state (either \texttt{D} for deleted, \texttt{U} for unchanged, \texttt{A} for added or \texttt{M} for modified),
     \item \texttt{(ID)} stands for node's unique identifier,
     \item \texttt{Title} stands for node's display name,
     \item \texttt{$<$Type$>$} only applies to a question node and represent its type. 
 \end{itemize}
 
-To successfully demonstrate correctnes of the migrator solution, the events must cover non-trivial customizations.
-Therefore, all possible difference states are taken into account.
-The upgrade contains following events:
+To successfully demonstrate the correctness of the migrator solution, the events must cover non-trivial customizations.
+Therefore, all the possible difference states are taken into account.
+The upgrade contains the following events:
 
 \begin{enumerate}
     \item \texttt{EditKnowledgeModelEvent} with identifier \texttt{KM},
-    \item \texttt{EditQuestionEvent} with identifer \texttt{Q2},
+    \item \texttt{EditQuestionEvent} with identifier \texttt{Q2},
     \item \texttt{AddAnswerEvent} with identifier \texttt{A2},
     \item \texttt{DeleteChapterEvent} with identifier \texttt{C3}.
 \end{enumerate}
 
 There are two important events.
-One is adding answer to template item question type and the other is deleting chapter.
+One is adding an answer to the template item question type, and the other is deleting a chapter.
 
-By adding an answer to a item templates question type, the application needs to take into account user's replies and create the change overview structures accordingly.
-To fully test this behaviour, the input state assumes that there is exactly one user's reply (filled item template) to this question.
+By adding an answer to an item templates question type, the application needs to take into account user's replies and create the change overview structures accordingly.
+To thoroughly test this behavior, the input state assumes that there are precisely two user's reply (filled item template) to this question.
 
-The chapter deletion event demonstrates how application should behave while deleting node composed from other nodes -- in this case, the chapter is composed from nested questions.
+The chapter deletion event demonstrates how the application should behave while deleting node composed from other nodes -- in this case, the chapter is composed of nested questions.
 
 \begin{figure}[H]
 	\dirtree{%
@@ -55,7 +61,7 @@ The chapter deletion event demonstrates how application should behave while dele
     \caption{Visualization of knowledge model customization events}\label{fig:cust-events}
 \end{figure}
 
-The figure \ref{fig:cust-events} shows how events in context of existing knowledge model for better understanding.
+Figure \ref{fig:cust-events} shows how events in the context of existing knowledge model for better understanding.
 
 \subsection{Expected output}
 
@@ -65,27 +71,27 @@ The summary of mapping customization events to changes visible to the user follo
 \subsection*{EditKnowledgeModelEvent}
 
 This event should be presented as a single change.
-Because it is an modification event, the application presents knowledge model title and description in the original and new versions.
+Because it is a modification event, the application presents a knowledge model title and description in the original and new versions.
 
-The change is previewed in both panels, each displaying appropriate version of the knowledge model.
+The change is previewed in both panels, each displaying an appropriate version of the knowledge model.
 
 \subsection*{EditQuestionEvent}
 
 In this case, editing question should be shown as a single change.
 The change should inform the user that there are two replies.
 
-The change is previewed in both panels, each displaying appropriate version of the question.
+The change is previewed in both left and right panels, each displaying the appropriate version of the question.
 
 \subsection*{AddAnswerEvent}
 
-Adding an answer to a question included in item template should be shown as change as many times as the user replied to the question.
-In this case, user replied by filling two item templates and therefore the added question should be shown twice -- each time in context of one of the answers.
+Adding an answer to a question included in the item template should be shown as change as many times as the user replied to the question.
+In this case, the user replied by filling two item templates and therefore the added question should be shown twice -- each time in the context of one of the answers.
 
 The change is displayed only in the right panel.
 
 \subsection*{DeleteChapterEvent}
 
-To ensure simplicity of the migration tool, the user should not be bothered by informations about deletion of nested.
-Because of that, the chapter deletion should be shown as a single change and nested questions should not be shown.
+To ensure simplicity of the migration tool, the user should not be bothered by information about the deletion of its nested nodes.
+Because of that, the chapter deletion should be shown as a single change, and nested questions should not be shown.
 
 The change is displayed only in the left panel.

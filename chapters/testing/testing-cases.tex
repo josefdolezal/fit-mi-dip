@@ -1,44 +1,43 @@
 \section{Testing cases}\label{sec:testing-cases}
 
 In this section, I will describe all possible cases which may occur during the migration process one by one.
-The correctness of the solution will be proven in the next section.
 
 \subsection{Added questionnaire node}
 
 In each migration process, there might be a new node added to the questionnaire.
-Such node needs to be always contained in the list of the diff event identifiers so user can use application navigation to reach the node.
+Such node needs to be always contained in the list of the diff event identifiers, so the user can use application navigation to reach the node.
 Moreover, the node needs to be listed more than once if it is part of the reply to the item template question type.
 
-Associated event will only reference the new value as there is no original value to be referenced.
+The associated event will only reference the new value as there is no original value to be referenced.
 
 \subsection{Modified questionnaire node}
 
-By definition, modified node also needs to be listed in the list of the diff event identifiers with the same condition applying to the node which si part of an item template reply.
+By definition, the modified node also needs to be listed in the list of the diff event identifiers with the same condition applying to the node which is part of an item template reply.
 
 Because the modification event is used to show both the original and a new version, it needs to reference two questionnaire nodes.
-One node is referenced from original questionnaire knowledge model, the other one from diff knowledge model.
+One node is referenced from the original questionnaire knowledge model, the other one from diff knowledge model.
 
 \subsection{Removed questionnaire node}
 
-When arbitrary node was removed from the knowledge model, it also needs to be listed in the list of diff event identifiers.
-Similary to addition event, this event only reference one node too.
+When an arbitrary node was removed from the knowledge model, it also needs to be listed in the list of diff event identifiers.
+Similarly to the addition event, this event only reference one node too.
 However, this node is referenced from the original knowledge model to reflect the version known to the user.
 
 \subsection{Unchanged questionnaire node}
 
-In opose to previous events, unchanged must not be contained in the list of diff event identifiers.
+In oppose to previous events, unchanged nodes must not be contained in the list of diff event identifiers.
 It will only be available in the \texttt{DiffStates} structure listed as \texttt{Unchanged}.
 
 This approach will allow the node to be displayed in the overview without any additional difference information (such as text highlighting).
-Because the old and new nodes must be the same (by definition), the event will only reference the original one but it will be displayed on both old questionnaire and new questionnaire panels.
+Because the old and new nodes must be the same (by definition), the event will only reference the original one, but it will be displayed on both the old questionnaire and new questionnaire panels.
 
 \subsection{Preserved migrated question type}
 
-In case of question node, there might occur the type change customization event in addition to textual changes.
-This event always needs to be marked as \texttt{Modified} because the question type can only be modified on the new node, if there was a previous node (described in \ref{sec:create-migration-context}).
+In the case of the question node, there might occur the type change customization event in addition to textual changes.
+This event always needs to be marked as \texttt{Modified} because the question type can only be modified on the new node if there was aa existing node before (described in \ref{sec:create-migration-context}).
 
-If the question type was not changed, the question can be treated as it was not changed at all (an \texttt{Unchanged} event) and its reply or replies must be preserved.
+If the question type was not changed, the question could be treated as it was not changed at all (an \texttt{Unchanged} event) and its reply or replies must be preserved.
 
 \subsection{Changed migrated question type}
 
-In case the question type was changed from either of types \texttt{Item templates}, \texttt{Value} or \texttt{Options} to other, there is no possibility to (automatically) preserve question and therfore it will not be available after the migration is done.
+In the case the question type was changed from either of types \texttt{Item templates}, \texttt{Value} or \texttt{Options} to another type, there is no possibility to (automatically) preserve the reply, and therefore it will not be available after the migration is done.
