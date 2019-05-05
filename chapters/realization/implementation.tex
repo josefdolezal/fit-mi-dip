@@ -1,7 +1,7 @@
 \section{Implementation}\label{sec:implementation}
 
-In this section, I describe in detail how features designed in chapter \ref{cptr:design} are actually implemented.
-Sections are appropriately divided into parts according to the application where it was implemented.
+In this section, I describe in detail how features designed in chapter \ref{cptr:design} are implemented.
+Sections are appropriately divided into parts according to the application where the feature was implemented.
 
 \subsection{Initialize questionnaire migration}
 
@@ -10,8 +10,11 @@ In the following sections, I will describe each part individually.
 
 \subsubsection*{Server-side implementation}
 
-On the server side, the initialization is an one step process.
-The server expose and \gls{rest} \gls{api} route accessible on \route{POST /questionnaires/:qtnUuid/migrations} (described in \ref{sec:server-interface}).
+On the server side, the initialization is a one-step process.
+The server exposes a \gls{rest} \gls{api} route accessible on:
+\begin{center}
+    \route{POST /questionnaires/:qtnUuid/migrations}.
+\end{center}
 
 The route is registered in shared application router using its \gls{url}, \gls{http} method and handling function.
 The registration is shown in code example \ref{code:route-registration}.
@@ -19,72 +22,76 @@ The registration is shown in code example \ref{code:route-registration}.
 \hscode{code:route-registration}{Registration of the \gls{rest} route}{route-registration.hs}
 
 The initialization itself is simple, as it only requires to validate input data and store the migration state.
-The state is a uncomplicated data structure which is composed from the migrated questionnaire (still based on the older version of the knowledge model) and identifier of the knowledge model.
+The state is an uncomplicated data structure which is composed of the migrated questionnaire (still based on the older version of the knowledge model) and an identifier of the knowledge model.
 
-Once the request pass validations, its data are passed are passed to \texttt{QuestionnaireMigrationService} module.
-This module is resposinble for migration consistency -- it always transitions from one consisten state to another.
+Once the request pass validations, its data are passed to the \texttt{Ques\-tion\-naire\-Migration\-Service} module.
+This module is responsible for migration consistency -- it always transitions from one consistent state to another.
 
-After the questionnaire is created, the stored data are enriched by compiled knowledge models and difference events and returned to the client.
+After the questionnaire is created, the stored data are enriched by compiled knowledge models and the difference events and returned to the client.
 
-By creating separate structure for keeping migration state, it is secured that the original version will never be modified during migration.
-This approach is more complex than doing the state modification in-place (by modifying the original questionnaire directly), but significantly helps to keep system consistency.
+By creating a separate structure for keeping the migration state, it is secured that the original version will never be modified during migration.
+This approach is more sophisticated than doing the state modification in-place (by modifying the original questionnaire directly) but significantly helps to keep system consistency.
 
 \subsubsection*{Client-side implementation}
 
 On the client side, this process requires two steps.
-In the first step, the application needs to fetch informations about available knowledge models which user can migrate to.
-This action is similar to upgrading knwoledge models itself and the whole code for such functionality was reused from existing code base (programmed by Ing. Jan Slifka\cite{mt-slifka}).
+In the first step, the application needs to fetch information about available knowledge models which user can migrate to.
+This action is similar to upgrading knowledge models itself, and the whole code for such functionality was reused from the existing code base (programmed by Ing. Jan Slifka\cite{mt-slifka}).
 
-Once the data are fetched, the application will filter out invalid data (older versions of the knowledge model) and displays modal window with available options (shown in wireframe \ref{fig:wf1}).
-Once the user selects version for migration the application sends data to the server.
-After server responds, the application will load the migration detail and display it to the user.
+Once the data are fetched, the application will filter out invalid data (older versions of the knowledge model) and display a modal window with available options (shown in wireframe \ref{fig:wf1}).
+Once the user selects a target version for the migration, the application sends data to the server.
+After the server responds, the application will load the migration detail and display it to the user.
 
-The code used for transition between application states is shown in example \ref{code:create-migration}.
+The code used for the transition between application states is shown in example \ref{code:create-migration}.
 
 \elmcode{code:create-migration}{Transitioning between states during migration initialization}{create-migration.elm}
 
 \subsection{Cancel questionnaire migration}
 
-Now I would like acquaint the reader with implementatiton of the migration cancelling feature.
+Now I would like to acquaint the reader with the implementation of the migration canceling feature.
 
 \subsubsection*{Server-side implementation}
 
-On the server side, the cancellation is done by deleting existing questionnaire state.
-By deleting initialized state, the original questionnaire will appear in exactly the same state as it was before the migration was initialized.
+On the server side, the cancellation is made by deleting the existing questionnaire state.
+By deleting the initialized state, the original questionnaire will appear in the same state as it was before the migration was initialized.
 
-The endpoint is available at \route{DELETE /questionnaires/:qtnUuid/migrations} route.
+The endpoint is available at route:
 
-Once the user sends request to the server, the it is validated by handler layer.
-After validation, the data are processed using service which takes care of converting request data into internal representation.
+\begin{center}
+    \route{DELETE /questionnaires/:qtnUuid/migrations}.
+\end{center}
+
+Once the user sends the request to the server, it is validated by the handler layer.
+After validation, the data are processed using service which takes care of converting request data into the internal representation.
 The deletion itself is done using \texttt{DAO} as shown in example \ref{code:delete-dao}.
 
 \hscode{code:delete-dao}{DAO module handling migration state deletion}{delete-dao.hs}
 
-The result of the database action is converted into \gls{http} status code and returned to the client application with empty body.
+The result of the database action is converted into an \gls{http} status code and returned to the client application with an empty body.
 
 \subsubsection*{Client-side implementation}
 
-The client application offers user to cancel migration only in case, where the server sent questionnaire data with appropriate flag (as shown in wireframe \ref{fig:wf5}).
-When the user choose to cancel the migration, the application sends request to the server.
-Once the server reposponds to the request, list of questionnaires is reloaded to correspond with latest state available at server.
+The client application offers the user to cancel migration only in case, where the server sent questionnaire data with appropriate flag (as shown in wireframe \ref{fig:wf5}).
+When the user chooses to cancel the migration, the application sends a request to the server.
+Once the server responds to the request, a list of questionnaires is reloaded to correspond with the latest state available at the server.
 
 \subsection{Create migration context}\label{sec:create-migration-context}
 
-The migration context is a feature, where user is able to see changes occured in between current and target version of the knowledge model.
-The context is made from knowledge model events, which are visualized in context of the filled questionnaire.
-Therefore, the migration context is only done on the client side of the application -- the only purpose of server for this action is to provide the current migration state.
+The migration context is a feature, where the user can see changes occurred in between current and target versions of the knowledge model.
+The context is made from knowledge model events, which are visualized in the context of the filled questionnaire.
+Therefore, the migration context is only done on the client side of the application -- the only purpose of the server for this action is to provide the current migration state.
 
 \subsubsection*{Server-side implementation}
 
-For the migration state, the server needs to create \textit{diff knowledge model}
-Diff knowledge model contains nodes from the newer version together with nodes which were only available in previous version and were deleted during customization.
+For the migration state, the server needs to create a \textit{diff knowledge model}.
+Diff knowledge model contains nodes from the newer version together with nodes which were only available in the previous version and were deleted during customization.
 
-Such knowledge model is created using specialized module called \texttt{KnowledgeModelDiffService}.
-This service module expose functionality to create diff knowledge model by giving original and target knowledge models identifiers.
+Such a knowledge model is created using a specific module called \texttt{Knowl\-edge\-Model\-Diff\-Service}.
+This service module exposes functionality to create diff knowledge model by giving original and target knowledge models identifiers.
 
-The service will compile original knowledge model and finds all events occured up until the target version.
-After that, specialized version of knowledge model compiler is called to create the diff knowledge model.
-The custom compiler main task is to remove all destructing events and running the standard compiler as shown in example \ref{code:custom-compiler}.
+The service will compile the original knowledge model and finds all events occurred up until the target version.
+After that, a specialized version of the knowledge model compiler is called to create the diff knowledge model.
+The custom compiler main task is to remove all destructing events and to run the standard compiler as shown in example \ref{code:custom-compiler}.
 
 Once the knowledge is compiled, it enriches the response to the client application.
 
@@ -92,8 +99,8 @@ Once the knowledge is compiled, it enriches the response to the client applicati
 
 \subsubsection*{Client-side implementation}
 
-On the client side, the making the context is more complex.
-There are three structures which needs to be created and maintained, it is:
+On the client side, making the context is more complex.
+There are three structures which need to be created and maintained; that is:
 
 \begin{itemize}
     \item \texttt{DiffTree},
@@ -101,11 +108,11 @@ There are three structures which needs to be created and maintained, it is:
     \item \texttt{DiffEventsUuids}.
 \end{itemize}
 
-As mentioned in section \ref{sec:questionnaire-overview}, the first two structures are incompatible and therefore the third structure is used to map between them.
+As mentioned in section \ref{sec:questionnaire-overview}, the first two structures are incompatible, and therefore the third structure is used to map between them.
 
-The \texttt{DiffTree} is used to create overview of the whole questionnaire structure (with all possible questions and answers) by also taking the user's answers into account.
+The \texttt{DiffTree} is used to create an overview of the whole questionnaire structure (with all possible questions and answers) by also taking the user's answers into account.
 
-Structure is built on top of the customly created knowledge model, called diff knowledge model.
+The structure is built on top of the custom created knowledge model, called diff knowledge model.
 
 Once the client application downloads the migration state, it starts building the mentioned structures.
 The first one created is \texttt{DiffTree}.
@@ -113,28 +120,40 @@ The tree is created by recursively browsing knowledge model nodes as shown in ex
 
 \elmcode{code:diff-tree}{Recursive initialization of the questionnaire tree (simplified)}{diff-tree.elm}
 
-Once the tree is created, the diff events are transformed into internal representation to build the \texttt{DiffStates} structure.
-Because the \texttt{DiffState} is used to show both original and new state, the transfromation needs not only the event as an input, but also both versions of the knowledge model.
+Once the tree is created, the diff events are transformed into the internal representation to build the \texttt{DiffStates} structure.
+Because the \texttt{DiffState} is used to show both original and new state, the transformation needs not only the event as an input, but also both versions of the knowledge model.
 While transforming events, there is no information about the hierarchical classification of the node.
-Therefore this structure can not be directly mapped to the tree structure and can not take in to account user's replies.
+Therefore this structure cannot be directly mapped to the tree structure and can not take into account the user's replies.
 The example of transforming events into \texttt{DiffState}s is shown in example \ref{code:transform-events}.
 
-\todo{Describe precedence of events (added over modified, deleted over modified)}
+While creating the state's structure, there might be multiple events modifying the same node (for example \texttt{Added} and \texttt{Modified} or \texttt{Modified} and \texttt{Removed}).
+Therefore, each event has assigned a significance:
+
+\vbox{%
+\begin{enumerate}
+    \item \texttt{Removed},
+    \item \texttt{Added},
+    \item \texttt{Modified}.
+\end{enumerate}
+}
+
+Whenever an event for a node occurs, it is only processed when there was no event for the same node processed previously or when the event has a higher priority.
+This makes sure the user sees events classified as they happened from his perspective.
 
 \elmcode{code:transform-events}{Transforming knowledge model events into diff state}{transform-events.elm}
 
-The last structure used to create questionnaire overview is \texttt{DiffEventsUuids}.
-This structure is build after the previous one because its content is used to quickly search diff state nodes for the overview tree and vice versa.
-It is created by visiting every node in \texttt{DiffTree} and looking up its unique identifier in \texttt{DiffState}, when the node is found in of both these structures, it is inserted into collection.
-This way, there will be multiple records for item templates question type if user replied multiple time.
+The last structure used to create a questionnaire overview is \texttt{Diff\-Events\-Uuids}.
+This structure is built after the previous one because its content is used to quickly search diff state nodes for the overview tree and vice versa.
+It is created by visiting every node in the \texttt{DiffTree} and looking up its unique identifier in the \texttt{DiffState}, when the node is found in of both these structures, it is inserted into the collection.
+This way, there will be multiple records for item templates question type if the user replied multiple time.
 Such behavior is intentional and correct by design.
-The illustration \ref{fig:mapping-structure} shows how the mentioned data structures are connected.
+Illustration \ref{fig:mapping-structure} shows how the mentioned data structures are connected.
 
-\image[0.8\textwidth]{fig:mapping-structure}{Mapping between tree structure and diff events}{mapping-structure.pdf}
+\image[0.8\textwidth]{fig:mapping-structure}{A mapping between tree structure and diff events}{mapping-structure.pdf}
 
 \subsection{Update migrated questionnaire state}
 
-Updating questionnaire state allows user to add flags to questions which are listed in list of diff events.
+Updating questionnaire state allows the user to add flags to questions which are listed in the list of diff events.
 
 \subsubsection*{Server-side implementation}
 
@@ -142,47 +161,53 @@ On the server side, the only responsibility is to persist given flags.
 As there might be more flags in the future with different entitlements for consistency, the server does not run any validations on flags provided from the client application.
 Currently, the whole consistency is managed on the client application only.
 
-Once the provided data from the client are successfully deserialized, it replaces the current flags for given question and are stored in questionnaire in migration state.
+Once the provided data from the client are successfully deserialized, it replaces the current flags for a given question and is stored in the questionnaire migration state.
 
 \subsubsection*{Client-side implementation}
 
-The client application allows to modify question state only when the question is listed in list of events and has default state (no flags).
+The client application allows modifying question state only when the question is listed in the list of events and has a default state (no flags).
 To do so, the application only shows the \textit{resolved} and \textit{needs review} buttons when the question state was not modified previously.
-In other case, the application renders an \textit{undo} button instead to allow user to return question to the default state.
+In another case, the application renders an \textit{undo} button instead to allow the user to return the question to the default state.
 
-The state is synchronized immediately when user presses appropriate button.
-Once the state change is synchronized with the server, it is also updated locally (without fetching data from server).
-The local update forces application to rerender the whole screen (in the sense of virtual \gls{dom}) which leads to switching action buttons for undo action and vice versa.
+The state is synchronized immediately when the user presses the appropriate button.
+Once the state change is synchronized with the server, it is also updated locally (without fetching data from the server).
+The local update forces application to re-render the whole screen (in the sense of virtual \gls{dom}) which leads to switching action buttons for the undo action and vice versa.
 
 The application also allows the user to add flags to system answers (for item templates or single choice answers).
-This, however, internally flags question instead of answer bacause the quetionnaire \gls{ui} does not support previews of answers only.
+This, however, internally adds the flag to the question instead of the answer because the questionnaire \gls{ui} does not support previews of answers only.
 
 \subsection{Finalize migration}
 
-Finilizing the migration is the last step to upgrade the questionnaire knowledge model version.
+Finalizing the migration is the last step to upgrade the questionnaire knowledge model version.
 
 \subsubsection*{Server-side implementation}
 
-Once the client requests to finalize the migration, server needs to do following tasks:
+Once the client requests to finalize the migration, the server needs to do the following tasks:
 
 \begin{enumerate}
-    \item create new questionnaire with migrated answers,
+    \item create a new questionnaire with migrated answers,
     \item delete the migration state.
 \end{enumerate}
 
-The first step ensures, that new questionnaire is created alongside the original one.
-Together with questionnaire, replies and question flags are copied.
+The first step ensures that the new questionnaire is created alongside the original one.
+Together with the questionnaire, replies and question flags are copied too.
 
-The second step reverts the original questionnaire into original state (can be migrated again).
-Once the migration is finished, user's list of questionnaire will contain the new questionnaire alongside the orginal.
+The second step reverts the original questionnaire into its original state (so it can be migrated again).
+Once the migration is finished, the user's list of questionnaires will contain the new questionnaire alongside the original.
 
-The \gls{api} endpoint is available at \route{PUT /questionnaires/:qtnUuid/migrations} and returns empty body with appropriate \gls{http} status code.
+The \gls{api} endpoint is available at:
+
+\begin{center}
+    \route{PUT /questionnaires/:qtnUuid/migrations}
+\end{center}
+
+and returns empty body with appropriate \gls{http} status code.
 
 \subsubsection*{Client-side implementation}
 
-The client application use similar approach as with initializing or finalizing the migration.
+The client application uses a similar approach as with initializing or finalizing the migration.
 The user initiates system action (\texttt{Message}, in Elm terminology) which is followed by creating an \gls{api} request to the server.
 
-The action s initiated from migration detail.
-Once the server responds, the application redirects user to the list of questionnaires.
-After the redirect, application will fetch the latest version of the questionnaires and user will the newer version display alongside the original one.
+The action is initiated from the migration detail.
+Once the server responds, the application redirects the user to the list of questionnaires.
+After the redirect, the application will fetch the latest version of the questionnaires and user will the newer version display alongside the original one.
